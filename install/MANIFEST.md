@@ -212,7 +212,34 @@ Installer implication: the RI service needs `CAP_SYS_NICE` (or root), e.g.
   sources describe) that is out of spec for a 3.3 V pin and v0.3 needs
   protection there. Measure tip-to-sleeve before connecting.
 
-## 10. Playback-follow service (phonkyo-monitor)
+## 10. Infrared -- the route RI cannot provide
+
+Not currently used (no IR hardware on v0.2/v0.3) but documented because it is
+the only way to reach TV input, volume and mute on a TX-8020.
+
+`software/phonkyo/ir.py` holds the RC-875S codes and emits raw pulse/space
+sequences for `ir-ctl`, built from the remote's own measured timings rather
+than relying on a NEC-variant decoder:
+
+| Button | Code |
+|---|---|
+| `input_tv` | `0x4B403BC4` |
+| `volume_up` / `volume_down` | `0x4BB640BF` / `0x4BB6C03F` |
+| `mute` | `0x4BB6A05F` |
+| `power` | `0x4B36D32C` |
+
+Everything needed is already on the Trixie image: `gpio-ir-tx.dtbo`,
+`pwm-ir-tx.dtbo` and `ir-ctl` (in `v4l-utils`). Only an IR LED is missing.
+
+If a future board revision adds one: use `pwm-ir-tx` on **GPIO12 or GPIO13**
+for a hardware-generated 38 kHz carrier. Do *not* use the overlay's default
+`gpio_pin=18` -- that is the I2S bit clock for the DAC.
+
+Adding an IR *receiver* as well (e.g. TSOP38238) would let users learn codes
+from their own remote, making the feature model-agnostic rather than tied to
+the RC-875S.
+
+## 11. Playback-follow service (phonkyo-monitor)
 
 Watches the DAC and drives the amp over RI: power on + select DOCK when audio
 starts, power off after an idle timeout.
@@ -281,11 +308,10 @@ Do not spend time re-deriving these. Swept on real hardware:
 
 - **All 256 families as `0xNN0`** (select input) -- 256 codes
 - **All 256 families as `0xNNF`** (power on + select) -- 256 codes
-- **Every low nibble `0`-`F`** across the six families the receiver responds
-  to (`0x02` CD, `0x07` TAPE, `0x12` BD/DVD, `0x17` DOCK, `0x2B` dimmer,
-  `0x42` system) -- 96 codes
+- **Every command nibble `1`-`E` across all 256 families** -- 3,570 codes
 
-608 codes total. Results:
+**4,082 of the 4,096-code space.** The 14 excluded are the `0x42_` service
+family (see the warning below). Results:
 
 | Wanted | Found |
 |---|---|
@@ -294,11 +320,27 @@ Do not spend time re-deriving these. Swept on real hardware:
 | Mute | **no** |
 | Input cycle/next | **no** |
 
+This is now **two independent exhaustive sweeps** in agreement: ours, and the
+developer whose published TX-8020 codes we started from, who brute-forced the
+same space and found only those four inputs plus the dimmer family. TV is not
+undiscovered -- it does not exist.
+
 Only four inputs respond to select codes: CD, TAPE, BD/DVD, DOCK -- exactly
 the four an RI-capable Onkyo *source device* plugs into. RI is a coordination
 bus between the receiver and its source equipment; a TV has no RI connector
 and nothing to coordinate, so Onkyo appears never to have assigned it a code.
 No published table for any model lists one either.
+
+### Sweep method, if this ever needs repeating
+
+Watching a display for an hour does not work. Instead, play continuous audio
+from the DAC with DOCK selected and *listen*: any code that changes the input
+cuts the sound, which is far more noticeable than a display change and leaves
+the operator free to do something else. Re-select DOCK every 32 codes so the
+audio resumes and the operator can localise a hit to a 32-code window.
+
+Caveat: mute and power-off cut the audio identically, so a dropout is a lead,
+not an answer -- each one needs a follow-up look at the display.
 
 Practical consequence: TV selection is not automatable over RI. Use the
 receiver's own remote. This does not affect phonkyo's use case, which needs
