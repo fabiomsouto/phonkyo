@@ -256,6 +256,37 @@ Recovered from the previous working install and confirmed against hardware:
 | `0x420` | power off |
 | `0x2B0/1/2` | dimmer high / mid / low |
 
+### Codes the receiver sends *to* the dock
+
+RI is bidirectional. With DOCK selected, the receiver forwards its transport
+buttons to the attached dock. Captured from a real receiver, three isolated
+frames each:
+
+| Code | low 3 bits | Action |
+|---|---|---|
+| `0x5C8` | `000` | track forward |
+| `0x5C9` | `001` | track back |
+| `0x5CB` | `011` | play/pause |
+
+The upper 9 bits (`0b010111001`) are the dock device class; only the low 3
+bits vary, so other transport commands likely live in the same family.
+
+This is the more interesting half: it means the receiver's own remote can
+drive playback on the Pi, if phonkyo listens for these and maps them onto
+whatever is currently playing.
+
+### What the receiver does *not* emit
+
+Input selection and volume changes produce nothing on the bus (verified with
+repeated 30 s captures while pressing them). RI is largely a downstream bus --
+the receiver commands attached sources, rather than broadcasting its own
+state. Sniffing cannot discover volume or input codes; those have to come from
+a code table or a sweep.
+
+Volume was tested and **did not work** with either `0x172`/`0x173` (DOCK-family
+offset) or the documented `0x1A2`/`0x1A3` (Video-family). It may not be
+controllable from the dock side on this model.
+
 The `...F` suffix means "power on and select this input"; `...0` selects only.
 Published tables disagree about which family is DOCK — `0x1AF` is a different
 input and does nothing useful here. Trust `0x17F`.

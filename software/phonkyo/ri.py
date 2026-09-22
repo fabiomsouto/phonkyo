@@ -66,6 +66,19 @@ COMMANDS = {
     "power_on_tape": 0x7F,
 }
 
+# The other direction of the bus. With DOCK selected, the receiver forwards
+# its transport buttons to the attached dock -- which is us. These were
+# captured from a real receiver (three isolated frames each), not guessed.
+#
+# Only the low 3 bits carry the command; the upper 9 (0b010111001) identify
+# the dock device class, so further transport codes very likely live in the
+# same family.
+DOCK_RX_COMMANDS = {
+    0x5C8: "track_forward",
+    0x5C9: "track_back",
+    0x5CB: "play_pause",
+}
+
 
 class RealTimeUnavailable(RuntimeError):
     pass
@@ -163,40 +176,13 @@ class RITransmitter:
                 _release_realtime()
         return errors
 
-    def sniff(self, seconds: float = 10.0, idle_gap_us: int = 20000) -> list[list[tuple[int, int]]]:
-        """Passively capture RI frames on the same line.
-
-        Useful for learning command codes from a real Onkyo component, since
-        the published code tables are unreliable. Returns a list of frames,
-        each a list of (level, duration_us).
-        """
-        lgpio.gpio_free(self._handle, self.gpio)
-        lgpio.gpio_claim_input(self._handle, self.gpio)
-        try:
-            frames, current = [], []
-            last_level = lgpio.gpio_read(self._handle, self.gpio)
-            last_change = time.perf_counter_ns()
-            end = last_change + int(seconds * 1e9)
-            while time.perf_counter_ns() < end:
-                level = lgpio.gpio_read(self._handle, self.gpio)
-                now = time.perf_counter_ns()
-                if level != last_level:
-                    current.append((last_level, (now - last_change) // 1000))
-                    last_level, last_change = level, now
-                elif current and (now - last_change) > idle_gap_us * 1000:
-                    frames.append(current)
-                    current = []
-            if current:
-                frames.append(current)
-            return frames
-        finally:
-            lgpio.gpio_free(self._handle, self.gpio)
-            lgpio.gpio_claim_output(self._handle, self.gpio, 0)
-
 
 def decode(frame: list[tuple[int, int]], timing: RITiming = DEFAULT_TIMING,
            tolerance: float = 0.35) -> int | None:
-    """Best-effort decode of a captured frame back into a 12-bit code."""
+    """Best-effort decode of a captured frame back into a 12-bit code.
+
+    See phonkyo.sniff for capturing frames off a live RI bus.
+    """
     def near(actual: int, expected: int) -> bool:
         return abs(actual - expected) <= expected * tolerance
 
