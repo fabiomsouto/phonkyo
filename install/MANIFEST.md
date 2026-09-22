@@ -275,6 +275,46 @@ This is the more interesting half: it means the receiver's own remote can
 drive playback on the Pi, if phonkyo listens for these and maps them onto
 whatever is currently playing.
 
+### Codes that are NOT available on a TX-8020 (exhaustively verified)
+
+Do not spend time re-deriving these. Swept on real hardware:
+
+- **All 256 families as `0xNN0`** (select input) -- 256 codes
+- **All 256 families as `0xNNF`** (power on + select) -- 256 codes
+- **Every low nibble `0`-`F`** across the six families the receiver responds
+  to (`0x02` CD, `0x07` TAPE, `0x12` BD/DVD, `0x17` DOCK, `0x2B` dimmer,
+  `0x42` system) -- 96 codes
+
+608 codes total. Results:
+
+| Wanted | Found |
+|---|---|
+| TV input select | **no** -- no code selects TV in either form |
+| Volume up/down | **no** -- `0x172/3` and `0x1A2/3` both inert |
+| Mute | **no** |
+| Input cycle/next | **no** |
+
+Only four inputs respond to select codes: CD, TAPE, BD/DVD, DOCK -- exactly
+the four an RI-capable Onkyo *source device* plugs into. RI is a coordination
+bus between the receiver and its source equipment; a TV has no RI connector
+and nothing to coordinate, so Onkyo appears never to have assigned it a code.
+No published table for any model lists one either.
+
+Practical consequence: TV selection is not automatable over RI. Use the
+receiver's own remote. This does not affect phonkyo's use case, which needs
+`0x17F` (power on + select DOCK) and nothing else.
+
+### DANGER: the 0x42_ family is service mode
+
+`0x42_` is the factory **service/diagnostic** interface, not a normal command
+family -- sweeping it put the receiver into a test mode displaying
+`Test 1-00` ... `Test-04-00`. `0x420` (power off) lives here, which is
+misleading: the rest of the family is not safe to probe. If it is entered
+accidentally, power-cycle the receiver at the wall.
+
+Any code-discovery tooling shipped to users must exclude `0x42_` except for
+the known-good `0x420`.
+
 ### What the receiver does *not* emit
 
 Input selection and volume changes produce nothing on the bus (verified with
