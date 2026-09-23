@@ -1,0 +1,44 @@
+/*
+ * phonkyo HAT overlay, embedded in the ID EEPROM.
+ *
+ * Derived from the stock hifiberry-dac overlay: the PCM5102A has no I2C
+ * control interface, so the card is a plain simple-audio-card binding of
+ * the I2S controller to a dummy codec. Embedding it here means a buyer
+ * never edits config.txt -- the firmware applies it from the EEPROM.
+ */
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	/* the Pi's I2S block drives the clocks */
+	fragment@0 {
+		target = <&i2s_clk_producer>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	/* the DAC itself -- no control bus, so just a codec node */
+	fragment@1 {
+		target-path = "/";
+		__overlay__ {
+			phonkyo_codec: pcm5102a-codec {
+				#sound-dai-cells = <0>;
+				compatible = "ti,pcm5102a";
+				status = "okay";
+			};
+		};
+	};
+
+	/* bind them together as a sound card */
+	fragment@2 {
+		target = <&sound>;
+		__overlay__ {
+			compatible = "hifiberry,hifiberry-dac";
+			i2s-controller = <&i2s_clk_producer>;
+			status = "okay";
+		};
+	};
+};

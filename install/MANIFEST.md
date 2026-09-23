@@ -239,7 +239,61 @@ Adding an IR *receiver* as well (e.g. TSOP38238) would let users learn codes
 from their own remote, making the feature model-agnostic rather than tied to
 the RC-875S.
 
-## 11. Playback-follow service (phonkyo-monitor)
+## 11. HAT ID EEPROM -- automating setup for buyers
+
+Source in `hardware/eeprom/`. Not fitted on v0.2/v0.3 (U1, JP1, R1, R2, C1
+are drawn in the schematic but have no footprints). Fitting it is what turns
+"edit config.txt by hand" into "flash the image, plug in the HAT, boot".
+
+### What the firmware does with it
+
+At boot the Pi reads the EEPROM at 0x50 on ID_SD/ID_SC (GPIO0/1) and:
+
+1. **applies the embedded device tree overlay** -- the PCM5102A sound card
+   is instantiated with no `dtoverlay=` line in config.txt at all
+2. **applies the GPIO function/pull settings** declared in the EEPROM
+3. **publishes identity** under `/proc/device-tree/hat/` -- vendor, product,
+   product_id, product_ver, uuid
+
+### Build
+
+```sh
+cd hardware/eeprom && make          # -> phonkyo.eep
+make verify                          # dump it back and eyeball the fields
+make flash                           # on the Pi, HAT fitted, JP1 open
+```
+
+**`eepmake` must be run with `-v1`.** It now defaults to the HAT+ format
+(Pi 5 era), which dropped `gpio_drive`/`gpio_slew`/`gpio_hysteresis` and is
+not what Zero 2 W firmware expects. Without it the build dies with
+`'gpio_drive' not supported on HAT+`. The Makefile handles this.
+
+Tooling is already present on the Trixie image via `rpi-eeprom`: `eepmake`,
+`eepflash.sh`, `eepdump`, plus `dtc` from `device-tree-compiler`.
+
+Verified: builds to a 901-byte image with the 778-byte overlay embedded, and
+every field round-trips through `eepdump`.
+
+`product_uuid` is left as zeros in the settings file so `eepmake` generates a
+fresh UUID per unit at programming time -- each board gets a unique identity.
+Bump `product_ver` per board revision so software can adapt.
+
+### What software does with it
+
+`software/phonkyo/hat.py` reads the identity and degrades gracefully -- on a
+board with no EEPROM `detect()` returns `None` and callers keep their current
+behaviour, so it is safe to ship before the hardware exists.
+
+### Do not hardcode `hw:0`
+
+Card numbering is not stable across machines. A buyer who leaves HDMI audio
+enabled gets the DAC on card 1, and a hardcoded `hw:0` then plays into the
+television. `hat.alsa_card()` resolves the card by *name*
+(`hw:CARD=sndrpihifiberry`), which removes that whole class of support
+ticket. The shairport-sync config currently says `output_device = "hw:0"` and
+should be changed.
+
+## 12. Playback-follow service (phonkyo-monitor)
 
 Watches the DAC and drives the amp over RI: power on + select DOCK when audio
 starts, power off after an idle timeout.
