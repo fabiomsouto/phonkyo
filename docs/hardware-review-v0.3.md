@@ -7,8 +7,13 @@
 ## Scope and method
 
 The KiCad files were parsed directly to extract placement, routing, zones, vias
-and silkscreen, and distances were computed from pad coordinates. No DRC or ERC
-was run; `kicad-cli` was not available when this review was written.
+and silkscreen, and distances were computed from pad coordinates. Circuit
+findings were checked against the PCM5102A datasheet (`adc/pcm5102a.pdf`, TI
+SLAS859C).
+
+A later KiCad 10 ERC/DRC run found **0 unconnected items and 0
+schematic-parity errors**. The only ERC errors were 4 missing `PWR_FLAG`s, on
++5V, +3V3, GND and GNDA, which are bookkeeping rather than real faults.
 
 Only **v0.2** has been built. A v0.2 board was exercised end to end on a Pi Zero
 2 W with an Onkyo TX-8020 receiver: DAC output on both channels, RI transmit, and
@@ -26,7 +31,7 @@ readiness rather than circuit design:
 2. The I2S bit clock, the fastest signal on the board, has the longest route,
    and nearly all of it has no reference plane.
 3. The 100 nF decoupling capacitors are 3.7 to 5.6 mm from the pins they serve.
-4. The XSMT mute network gives effectively no soft-start.
+4. AVDD (pin 8) has no local decoupling at all.
 5. The ID EEPROM is drawn in the schematic but not fitted, so the board is not
    HAT-spec compliant.
 6. There is no ESD protection on the user-accessible RI jack.
@@ -48,6 +53,12 @@ readiness rather than circuit design:
 - **Ground stitching around the DAC.** Nine GND vias. Most cluster around U2's
   digital pins (x 152 to 156.5 mm), one sits at the R11 star point, and one takes
   U2's DGND pin to the bottom plane.
+- **XSMT power sensing.** R5/R6 divide +5V onto XSMT. This is TI's documented
+  "External Power Sense Undervoltage Protection Mode" (datasheet §11.3,
+  Fig. 39): the DAC mutes as the upstream rail falls, before the regulated
+  3.3 V rails collapse. See finding 4 for why it should be left as it is.
+- **SCK tied to GND.** This selects the internal PLL, which derives the system
+  clock from BCK. That is correct for a slave-only PCM5102A driven by a Pi.
 - **Mechanical.** The mounting holes are on the 58 x 23 mm Pi Zero pattern, and
   there is a keepout for the Pi's PoE header.
 
@@ -99,41 +110,62 @@ add a ground pour on F.Cu along its path.
 
 | Capacitor | Serves | Distance to pin |
 |---|---|---|
-| C7, 100 nF | AVDD, pin 1 | **3.69 mm** |
+| C7, 100 nF | CPVDD, pin 1 | **3.69 mm** |
 | C11, 100 nF | DVDD, pin 20 | **5.62 mm** |
 | C10, 2.2 uF | VNEG, pin 5 | **5.67 mm** |
-| C8, 10 uF | AVDD | 5.17 mm |
+| C8, 10 uF | CPVDD / AVDD | 5.17 mm |
+| none | **AVDD, pin 8** | **~9 mm to the nearest cap** |
 | C9, 10 uF | DVDD | 6.77 mm |
 | C12 / C13 | LDOO, pin 18 | 2.75 / 2.88 mm |
 | C4, 2.2 uF | CAPP / CAPM | 2.28 mm |
 
-The 100 nF capacitors handle high-frequency decoupling and should be within about
-2 mm of the pin. At 5.6 mm, trace inductance undoes most of their benefit. C10
-decouples the charge-pump output and deserves the same treatment. The bulk 10 uF
-capacitors are less sensitive to placement.
+The datasheet (§12.1) asks for supply and charge-pump decoupling "as close as
+possible to the device". It gives no distance; about 2 mm is a common rule of
+thumb. On the datasheet pinout, pin 1 is **CPVDD** (the charge-pump supply) and
+pin 8 is **AVDD**. The review originally labelled pin 1 as AVDD.
 
-**Recommendation:** Move C7, C11 and C10 to the pins they serve, on the same
-layer and with short, direct connections.
+The 100 nF capacitors handle high-frequency decoupling, where trace inductance
+matters most. At 5.6 mm, that inductance undoes most of their benefit. C10 is a
+2.2 uF reservoir on the charge-pump output, so a few nH of extra trace matters
+far less there, and it can wait for a wider re-layout. The bulk 10 uF
+capacitors are also less sensitive to placement.
 
-### 4. The XSMT soft-start is too short to work
+**AVDD (pin 8) has no local capacitor at all.** It is fed from beside pin 1 via
+a B.Cu detour, about 9 mm from any capacitor. TI's reference layout decouples
+CPVDD and AVDD separately.
 
-R5 (10 k, to +5 V) and R6 (20 k, to GND) set XSMT to 3.33 V, filtered by C6
-(2.2 nF). The Thevenin resistance is 6.67 k, so
+**Recommendation:** Place C7 and C11 at their pins, and add a 100 nF capacitor
+at pin 8.
 
-    tau = 6.67 k x 2.2 nF ~= 15 us
+**Status:** C7 has been moved directly above pin 1, 0.75 mm pad-to-pad, with
+DRC clean. C11 cannot get close to pin 20 without reorganising the right-hand
+fan-out: the LDOO route from C12/C13 to pin 18 loops around pins 19 and 20
+through the only free space.
 
-A useful power-on mute delay is roughly 10 to 100 ms. At 15 us, the DAC unmutes
-almost as soon as it has power, which is a likely cause of a turn-on pop into the
-amplifier. This has not been confirmed on hardware.
+### 4. XSMT: leave it as designed (finding withdrawn)
 
-The divider also runs from +5 V, which can rise before the Pi's 3V3 rail. XSMT
-can therefore be driven high before DVDD is valid, and its steady state
-(3.33 V) is slightly above the 3.3 V rail.
+An earlier version of this review recommended increasing C6 to about 2.2 uF and
+feeding the divider from +3V3. **Both would be mistakes**, and that
+recommendation is withdrawn:
 
-**Recommendation:** Increase C6 to about 2.2 uF (tau ~= 15 ms) and feed the
-divider from +3V3. Alternatively, drive XSMT from a spare GPIO. The pin defaults
-low at boot, so the DAC starts muted, and software can then mute it around amp
-power transitions. That would also give phonkyo a proper software mute.
+- The +5V divider implements TI's **External Power Sense Undervoltage
+  Protection Mode** (datasheet §11.3, Fig. 39). If XSMT falls from high to low
+  over 6 ms or more, the DAC treats it as an undervoltage event: soft mute starts
+  at 2 V and analog mute at 1.2 V. Feeding the divider from +3V3 would defeat
+  this.
+- A large C6 would make XSMT lag the falling 5 V rail by about 15 ms, delaying
+  the mute it exists to trigger. When XSMT is used as a digital control, §9.3.3
+  also requires edges faster than 20 ns.
+- The power-on pop concern does not hold up. The DAC holds its outputs muted
+  until it sees valid I2S clocks, and the Pi does not start those until playback
+  begins.
+
+**One real limitation.** With a 2/3 ratio, soft mute begins only once 5 V has
+fallen to about 3.0 V. That is already near the dropout of the regulators that
+make the 3.3 V rails. On a Pi, 5 V also collapses within a few milliseconds when
+power is pulled, so this mode offers limited protection whatever the ratio. A
+normal shutdown mutes cleanly anyway, because the DAC mutes when the I2S clocks
+stop. No change is recommended.
 
 ### 5. Ground topology
 
@@ -148,11 +180,12 @@ area even though they share only one DC connection. The top layer has no ground
 pour at all over the digital two-thirds of the board, which is what leaves B.Cu
 signals such as BCK without a reference (see finding 2).
 
-The design follows a coherent split-ground philosophy and evidently works. Many
-current references, however, recommend a single unbroken ground plane, with
-separation achieved by placement and return-path control rather than by
-splitting the plane. Either approach is defensible. The current layout falls
-between them.
+The design follows a coherent split-ground philosophy and evidently works. TI's
+own guidance points the other way, though: *"Most engineers use a shared common
+ground for an entire device. GND can be considered AGND and DGND connected"*
+(§12.1). Many general references agree, preferring a single unbroken plane with
+separation achieved by placement and return-path control. The current layout
+falls between the two approaches.
 
 **Recommendation:** Choose one approach and apply it consistently:
 
@@ -205,13 +238,13 @@ capacitor to keep the corner frequency.
 
 1. Silkscreen: label `LINE OUT` and `RI`, and show reference designators.
 2. Route BCK on F.Cu.
-3. Move C7, C11 and C10 to within 2 mm of their pins.
-4. Change C6 to about 2.2 uF and feed the XSMT divider from +3V3, or drive XSMT
-   from a GPIO.
-5. Settle on a ground topology (finding 5).
-6. Fit the ID EEPROM (U1, R1, R2, JP1, C1).
-7. Add an ESD diode and a series resistor on J4 after measuring the receiver-side
-   pull-down.
+3. Decoupling: C7 done. Move C11 to pin 20 (needs the right-hand fan-out
+   reorganised) and add a 100 nF capacitor at AVDD pin 8.
+4. Settle on a ground topology (finding 5). TI recommends a common ground.
+5. Fit the ID EEPROM (U1, R1, R2, JP1, C1).
+6. Add an ESD diode and a series resistor on J4 after measuring the
+   receiver-side pull-down.
+7. Add the 4 missing `PWR_FLAG`s so ERC is clean.
 
 ## Related
 
