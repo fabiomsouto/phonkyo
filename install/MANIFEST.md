@@ -104,6 +104,16 @@ cd shairport-sync && autoreconf -fi && ./configure \
 
 Zero 2 W has 512 MB RAM — use `-j2`, not `-j4`.
 
+`/etc/shairport-sync.conf` needs two edits from stock:
+
+```
+name = "phonkyo";
+output_device = "hw:CARD=sndrpihifiberry";
+```
+
+Address the DAC by card **name**, never `hw:0` -- see section 11. raspotify and
+Plexamp use the ALSA default and need no change while the DAC is the only card.
+
 ## 6. Plexamp headless
 
 Needs `nodejs` (Debian Trixie ships 20.19.2, which satisfies it).
@@ -290,8 +300,7 @@ Card numbering is not stable across machines. A buyer who leaves HDMI audio
 enabled gets the DAC on card 1, and a hardcoded `hw:0` then plays into the
 television. `hat.alsa_card()` resolves the card by *name*
 (`hw:CARD=sndrpihifiberry`), which removes that whole class of support
-ticket. The shairport-sync config currently says `output_device = "hw:0"` and
-should be changed.
+ticket.
 
 ## 12. Playback-follow service (phonkyo-monitor)
 
