@@ -27,7 +27,8 @@ the DAC, the output filter is placed well, and the grounding follows a
 deliberate single-point scheme. The significant issues are in layout and product
 readiness rather than circuit design:
 
-1. No functional silkscreen. The two identical jacks are unlabelled.
+1. The plot settings still write to `production/v0.2`, so generating v0.3
+   output would overwrite the v0.2 fabrication files.
 2. The I2S bit clock, the fastest signal on the board, has the longest route,
    and nearly all of it has no reference plane.
 3. The 100 nF decoupling capacitors are 3.7 to 5.6 mm from the pins they serve.
@@ -66,20 +67,22 @@ readiness rather than circuit design:
 
 Findings are ordered by value per effort, not by severity.
 
-### 1. No functional silkscreen
+### 1. Plot output points at the v0.2 production folder
 
-Every reference designator is hidden (`(hide yes)`), and the board has no
-free-standing silkscreen text. All 650 F.SilkS elements are artwork. J2 (line
-out) and J4 (RI) are the same PJ-320D part, mounted next to each other, with no
-labels.
+The v0.3 board's plot settings still have `outputdirectory "production/v0.2"`.
+Plotting v0.3 Gerbers without changing this writes them over the v0.2
+fabrication files, which are the ones that were actually manufactured.
 
-This caused a real problem during bring-up. The cables were plugged in swapped,
-and diagnosing it took about twenty minutes. A buyer will run into the same thing
-on first use.
+**Recommendation:** Set the output directory to `production/v0.3` before
+generating fabrication files. The repo also has no BOM or position files for
+v0.3 yet.
 
-**Recommendation:** Add `LINE OUT` and `RI` labels at J2 and J4. Consider showing
-reference designators on the back silkscreen to help with rework. This is the
-cheapest change in this review and would prevent the most confusion.
+**Correction.** An earlier version of this review said the board had no
+functional silkscreen and that the jacks were unlabelled. That was wrong. v0.2
+and v0.3 both carry knockout labels: `Remote` by J4, `Audio` by J2, `DAC`, the
+board name, and a specs block on the back. The earlier text-extraction step
+missed them. Reference designators are hidden, which only matters for rework
+and debugging. The jack mix-up during bring-up happened despite the labels.
 
 ### 2. The I2S bit clock has the worst route on the board
 
@@ -236,7 +239,7 @@ capacitor to keep the corner frequency.
 
 ## Suggested v0.4 changes, in order
 
-1. Silkscreen: label `LINE OUT` and `RI`, and show reference designators.
+1. Plot settings: point the output directory at `production/v0.3`.
 2. Route BCK on F.Cu.
 3. Decoupling: C7 done. Move C11 to pin 20 (needs the right-hand fan-out
    reorganised) and add a 100 nF capacitor at AVDD pin 8.
