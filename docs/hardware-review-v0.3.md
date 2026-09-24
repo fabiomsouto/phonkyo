@@ -140,10 +140,11 @@ CPVDD and AVDD separately.
 **Recommendation:** Place C7 and C11 at their pins, and add a 100 nF capacitor
 at pin 8.
 
-**Status:** C7 has been moved directly above pin 1, 0.75 mm pad-to-pad, with
-DRC clean. C11 cannot get close to pin 20 without reorganising the right-hand
-fan-out: the LDOO route from C12/C13 to pin 18 loops around pins 19 and 20
-through the only free space.
+**Status:** Done on `feat/v0.3-caps-eeprom`, DRC clean. Pad-to-pad distances
+are now: C7 to pin 1, 0.78 mm; C11 to pin 20, 0.64 mm; and the new C14
+(100 nF) to AVDD pin 8, 0.64 mm. To do this, the right-hand fan-out was
+reorganised: C11 and C12 moved to 0402, and the LDOO loop around pins 19 and
+20 was removed. C10 is unchanged.
 
 ### 4. XSMT: leave it as designed (finding withdrawn)
 
@@ -212,6 +213,11 @@ Once U1 is fitted, the board configures itself at boot.
 and ID_SC (GPIO0/1, header pins 27/28), with U1 at address 0x50. Ship with JP1
 open so the EEPROM can be programmed in production, then close it.
 
+**Status:** Fitted on `feat/v0.3-caps-eeprom`. U1 is a TSSOP-8 in the strip
+above the jacks, and JP1 is on the bottom side. Both ID lines run on F.Cu,
+with B.Cu used only for short hops under the power rails. The image's
+`product_ver` is now 0x0003 to match.
+
 ### 7. No ESD or series protection on the RI jack
 
 J4's tip connects directly to GPIO25. J4 is a user-accessible connector, so an
@@ -241,10 +247,9 @@ capacitor to keep the corner frequency.
 
 1. Plot settings: point the output directory at `production/v0.3`.
 2. Route BCK on F.Cu.
-3. Decoupling: C7 done. Move C11 to pin 20 (needs the right-hand fan-out
-   reorganised) and add a 100 nF capacitor at AVDD pin 8.
+3. ~~Decoupling: C7, C11 at their pins; 100 nF at AVDD pin 8.~~ Done (C14).
 4. Settle on a ground topology (finding 5). TI recommends a common ground.
-5. Fit the ID EEPROM (U1, R1, R2, JP1, C1).
+5. ~~Fit the ID EEPROM (U1, R1, R2, JP1, C1).~~ Done.
 6. Add an ESD diode and a series resistor on J4 after measuring the
    receiver-side pull-down.
 7. Add the 4 missing `PWR_FLAG`s so ERC is clean.
