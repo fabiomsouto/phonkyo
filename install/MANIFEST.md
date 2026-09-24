@@ -251,9 +251,9 @@ the RC-875S.
 
 ## 11. HAT ID EEPROM -- automating setup for buyers
 
-Source in `hardware/eeprom/`. Not fitted on v0.2/v0.3 (U1, JP1, R1, R2, C1
-are drawn in the schematic but have no footprints). Fitting it is what turns
-"edit config.txt by hand" into "flash the image, plug in the HAT, boot".
+Source in `hardware/eeprom/`. Fitted from v0.3 (U1, R1, R2, C1, JP1); v0.2
+has none. It is what turns "edit config.txt by hand" into "flash the image,
+plug in the HAT, boot".
 
 ### What the firmware does with it
 
@@ -291,8 +291,8 @@ Bump `product_ver` per board revision so software can adapt.
 ### What software does with it
 
 `software/phonkyo/hat.py` reads the identity and degrades gracefully -- on a
-board with no EEPROM `detect()` returns `None` and callers keep their current
-behaviour, so it is safe to ship before the hardware exists.
+board with no EEPROM (v0.2, or a v0.3 not yet programmed) `detect()` returns
+`None` and callers keep their current behaviour.
 
 ### Do not hardcode `hw:0`
 

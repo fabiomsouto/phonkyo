@@ -19,7 +19,7 @@ product_uuid 00000000-0000-0000-0000-000000000000
 # 16-bit product id / version. Bump product_ver per board revision so
 # software can adapt to hardware differences.
 product_id 0x0001
-product_ver 0x0004
+product_ver 0x0003
 
 vendor "phonkyo"
 product "phonkyo DAC + Onkyo RI"

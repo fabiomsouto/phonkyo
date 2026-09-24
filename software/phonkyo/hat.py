@@ -9,8 +9,8 @@ reliable answer to two questions a shipped product needs to ask:
   - which board revision is it, so behaviour can adapt without the user
     being asked
 
-Everything degrades gracefully: on a board with no EEPROM fitted (v0.2, v0.3)
-detect() returns None and callers fall back to their current behaviour.
+Everything degrades gracefully: on a board with no EEPROM (v0.2), or one
+not yet programmed, detect() returns None and callers fall back to their current behaviour.
 """
 
 from __future__ import annotations
@@ -37,7 +37,7 @@ class HatInfo:
 
     @property
     def revision(self) -> str:
-        """product_ver 0x0004 -> 'v0.4'."""
+        """product_ver 0x0003 -> 'v0.3'."""
         return f"v{self.product_ver // 10}.{self.product_ver % 10}"
 
 
@@ -91,7 +91,7 @@ def alsa_card(name: str = "sndrpihifiberry") -> str | None:
 if __name__ == "__main__":
     info = detect()
     if info is None:
-        print("no HAT EEPROM detected (expected on v0.2 / v0.3 boards)")
+        print("no HAT EEPROM detected (expected on v0.2, or an unprogrammed v0.3)")
     else:
         print(f"vendor      {info.vendor}")
         print(f"product     {info.product}")
