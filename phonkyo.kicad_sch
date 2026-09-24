@@ -6611,10 +6611,10 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim yes)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "0f7872a7-de47-41d5-a21f-9934102d3a5f")
 		(property "Reference" "C1"
 			(at 64.9858 176.6506 0)
@@ -6638,7 +6638,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 67.31 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -7004,10 +7004,10 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim yes)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "23a975f6-1804-488b-95df-72344a03f45b")
 		(property "Reference" "R1"
 			(at 95.4786 169.037 0)
@@ -7031,7 +7031,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 93.98 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -7725,9 +7725,9 @@
 		(body_style 1)
 		(exclude_from_sim yes)
 		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp yes)
+		(on_board yes)
+		(in_pos_files no)
+		(dnp no)
 		(uuid "43e66c4c-de75-44f8-8171-19825b035cbb")
 		(property "Reference" "JP1"
 			(at 96.52 183.623 0)
@@ -7750,7 +7750,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm"
 			(at 96.52 180.34 0)
 			(hide yes)
 			(show_name no)
@@ -8044,10 +8044,10 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim yes)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "510c400a-2410-46b0-a7fb-1072fc4f848b")
 		(property "Reference" "R2"
 			(at 103.0986 169.037 0)
@@ -8071,7 +8071,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 101.6 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -8128,7 +8128,7 @@
 		(in_bom no)
 		(on_board no)
 		(in_pos_files yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "55bbe0f6-d435-4137-8361-5f963fa98019")
 		(property "Reference" "#PWR0101"
 			(at 101.6 166.37 0)
@@ -8530,10 +8530,10 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim yes)
-		(in_bom no)
-		(on_board no)
+		(in_bom yes)
+		(on_board yes)
 		(in_pos_files yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "6d6e5c8e-c0cf-4e61-9c00-723a754d58be")
 		(property "Reference" "U1"
 			(at 74.93 170.7958 0)
@@ -8555,7 +8555,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_SO:TSSOP-8_4.4x3mm_P0.65mm"
 			(at 81.28 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -9745,7 +9745,7 @@
 		(in_bom no)
 		(on_board no)
 		(in_pos_files yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "b1f566e9-0031-4962-855e-0c4a126ebda1")
 		(property "Reference" "#PWR0102"
 			(at 81.28 196.85 0)
