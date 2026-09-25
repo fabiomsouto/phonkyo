@@ -6,7 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "Phonkyo")
-		(date "2024-10-05")
+		(date "2026-09-25")
 		(rev "0.3")
 		(company "Obcecado")
 		(comment 1 "Prototype")
@@ -3911,6 +3911,12 @@
 		(uuid "384c8bb9-c9f1-4a2a-9bcf-63b87df0b208")
 	)
 	(junction
+		(at 204.47 128.27)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "486344e1-1e5f-44a8-83fd-72a9b0448748")
+	)
+	(junction
 		(at 58.42 58.42)
 		(diameter 1.016)
 		(color 0 0 0 0)
@@ -4037,6 +4043,12 @@
 		(uuid "c68cf4c7-2044-433c-a5d3-b0e45196ff23")
 	)
 	(junction
+		(at 210.82 120.65)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c7797bcc-c8f2-4a96-8360-4d0b3ed16a02")
+	)
+	(junction
 		(at 81.28 165.1)
 		(diameter 1.016)
 		(color 0 0 0 0)
@@ -4089,68 +4101,6 @@
 	(no_connect
 		(at 71.12 180.34)
 		(uuid "00f1806c-4158-494e-882b-c5ac9b7a930c")
-	)
-	(wire
-		(pts
-			(xy 223.52 121.92) (xy 224.79 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "de151357-4a89-4bff-825b-a7b65226970e")
-	)
-	(wire
-		(pts
-			(xy 229.87 121.92) (xy 231.14 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "270e01b8-c36e-456b-b54f-ded7a402ca46")
-	)
-	(wire
-		(pts
-			(xy 210.82 120.65) (xy 213.36 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "84bedca6-4f73-46c5-a562-6afe99eb1570")
-	)
-	(wire
-		(pts
-			(xy 213.36 120.65) (xy 213.36 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2d89bec3-5524-483a-a65f-fcbcee088e02")
-	)
-	(wire
-		(pts
-			(xy 204.47 128.27) (xy 213.36 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "964ce3cc-f6e1-4ab7-8a6f-22422be61c03")
-	)
-	(junction
-		(at 210.82 120.65)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c7797bcc-c8f2-4a96-8360-4d0b3ed16a02")
-	)
-	(junction
-		(at 204.47 128.27)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "486344e1-1e5f-44a8-83fd-72a9b0448748")
 	)
 	(wire
 		(pts
@@ -4404,6 +4354,16 @@
 	)
 	(wire
 		(pts
+			(xy 229.87 121.92) (xy 231.14 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "270e01b8-c36e-456b-b54f-ded7a402ca46")
+	)
+	(wire
+		(pts
 			(xy 73.66 35.56) (xy 100.33 35.56)
 		)
 		(stroke
@@ -4461,6 +4421,16 @@
 			(type default)
 		)
 		(uuid "2c42ad42-5b69-4948-a042-a7110f6166c1")
+	)
+	(wire
+		(pts
+			(xy 213.36 120.65) (xy 213.36 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d89bec3-5524-483a-a65f-fcbcee088e02")
 	)
 	(wire
 		(pts
@@ -5014,6 +4984,16 @@
 	)
 	(wire
 		(pts
+			(xy 210.82 120.65) (xy 213.36 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "84bedca6-4f73-46c5-a562-6afe99eb1570")
+	)
+	(wire
+		(pts
 			(xy 121.92 55.88) (xy 123.19 55.88)
 		)
 		(stroke
@@ -5141,6 +5121,16 @@
 			(type default)
 		)
 		(uuid "9603348d-df4c-41cb-b6cd-63e6da73e93e")
+	)
+	(wire
+		(pts
+			(xy 204.47 128.27) (xy 213.36 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "964ce3cc-f6e1-4ab7-8a6f-22422be61c03")
 	)
 	(wire
 		(pts
@@ -5571,6 +5561,16 @@
 			(type solid)
 		)
 		(uuid "ddb5ec2a-613c-4ee5-b250-77656b088e84")
+	)
+	(wire
+		(pts
+			(xy 223.52 121.92) (xy 224.79 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "de151357-4a89-4bff-825b-a7b65226970e")
 	)
 	(wire
 		(pts
@@ -6465,8 +6465,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C5124634"
-			(at -57.15 74.93 0)
+		(property "Description" ""
+			(at 66.04 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6476,8 +6476,8 @@
 				)
 			)
 		)
-		(property "Description" ""
-			(at 66.04 50.8 0)
+		(property "LCSC" "C5124634"
+			(at -57.15 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6672,7 +6672,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1525"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 177.8 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -6683,7 +6683,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C1525"
 			(at 177.8 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -6763,7 +6763,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25117"
+		(property "Description" ""
 			(at 236.22 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -6774,7 +6774,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C25117"
 			(at 236.22 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -6855,7 +6855,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1525"
+		(property "Description" ""
 			(at 67.31 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -6866,7 +6866,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C1525"
 			(at 67.31 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -6946,7 +6946,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25092"
+		(property "Description" ""
 			(at 198.12 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -6957,7 +6957,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C25092"
 			(at 198.12 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -7113,7 +7113,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C385029"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 255.27 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -7124,7 +7124,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C385029"
 			(at 255.27 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -7281,7 +7281,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C131467"
+		(property "Description" ""
 			(at 93.98 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -7292,7 +7292,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C131467"
 			(at 93.98 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -7452,7 +7452,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C95562"
+		(property "Description" "Audio Jack, 4 Poles (TRRS)"
 			(at 265.43 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -7463,7 +7463,7 @@
 				)
 			)
 		)
-		(property "Description" "Audio Jack, 4 Poles (TRRS)"
+		(property "LCSC" "C95562"
 			(at 265.43 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -7628,7 +7628,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C107369"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 223.52 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -7639,7 +7639,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C107369"
 			(at 223.52 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -7797,7 +7797,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C107369"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 231.14 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -7808,7 +7808,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C107369"
 			(at 231.14 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -7964,7 +7964,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25092"
+		(property "Description" ""
 			(at 198.12 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -7975,7 +7975,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C25092"
 			(at 198.12 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -8213,7 +8213,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25744"
+		(property "Description" "Resistor"
 			(at 165.1 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -8224,7 +8224,7 @@
 				)
 			)
 		)
-		(property "Description" "Resistor"
+		(property "LCSC" "C25744"
 			(at 165.1 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -8306,7 +8306,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C385029"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 157.48 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -8317,7 +8317,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C385029"
 			(at 157.48 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -8398,7 +8398,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C131467"
+		(property "Description" ""
 			(at 101.6 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -8409,7 +8409,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C131467"
 			(at 101.6 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -8568,7 +8568,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25765"
+		(property "Description" "Resistor"
 			(at 165.1 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -8579,7 +8579,7 @@
 				)
 			)
 		)
-		(property "Description" "Resistor"
+		(property "LCSC" "C25765"
 			(at 165.1 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -8661,7 +8661,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C14663"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 195.58 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -8672,7 +8672,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C14663"
 			(at 195.58 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -8754,7 +8754,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C95562"
+		(property "Description" "Audio Jack, 4 Poles (TRRS)"
 			(at 128.27 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -8765,7 +8765,7 @@
 				)
 			)
 		)
-		(property "Description" "Audio Jack, 4 Poles (TRRS)"
+		(property "LCSC" "C95562"
 			(at 128.27 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -8926,7 +8926,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C146734"
+		(property "Description" ""
 			(at 81.28 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -8937,7 +8937,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C146734"
 			(at 81.28 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -9036,7 +9036,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C5446"
+		(property "Description" "Positive 60-250mA Low Dropout Regulator, Fixed Output, SOT-23"
 			(at 186.69 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -9047,7 +9047,7 @@
 				)
 			)
 		)
-		(property "Description" "Positive 60-250mA Low Dropout Regulator, Fixed Output, SOT-23"
+		(property "LCSC" "C5446"
 			(at 186.69 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -9130,7 +9130,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25092"
+		(property "Description" ""
 			(at 198.12 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -9141,7 +9141,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C25092"
 			(at 198.12 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -9223,7 +9223,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15849"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 175.26 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -9234,7 +9234,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C15849"
 			(at 175.26 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -9316,7 +9316,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 204.47 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -9327,7 +9327,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C19702"
 			(at 204.47 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -9348,99 +9348,6 @@
 			(project "phonkyo"
 				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
 					(reference "C8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 213.36 125.73 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ea288ad1-157b-4266-a114-5dfeb78697fd")
-		(property "Reference" "C14"
-			(at 215.90 124.4535 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "0.1u"
-			(at 215.90 126.9935 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 213.36 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 213.36 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C1525"
-			(at 213.36 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 213.36 125.73 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "12abe823-65ba-4e55-905e-3d052bdd0995")
-		)
-		(pin "2"
-			(uuid "fa1dd3a6-f83c-49a9-a587-a0b1d24f89e4")
-		)
-		(instances
-			(project "phonkyo"
-				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
-					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -9576,7 +9483,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25117"
+		(property "Description" ""
 			(at 236.22 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -9587,7 +9494,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "LCSC" "C25117"
 			(at 236.22 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -9900,7 +9807,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 240.03 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -9911,7 +9818,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C19702"
 			(at 240.03 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -10147,7 +10054,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C385029"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 255.27 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -10158,7 +10065,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C385029"
 			(at 255.27 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -10393,7 +10300,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 189.23 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -10404,7 +10311,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C19702"
 			(at 189.23 43.18 0)
 			(hide yes)
 			(show_name no)
@@ -10565,7 +10472,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1525"
+		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 231.14 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -10576,7 +10483,7 @@
 				)
 			)
 		)
-		(property "Description" "Unpolarized capacitor, small symbol"
+		(property "LCSC" "C1525"
 			(at 231.14 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -10597,6 +10504,99 @@
 			(project "phonkyo"
 				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
 					(reference "C12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 213.36 125.73 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ea288ad1-157b-4266-a114-5dfeb78697fd")
+		(property "Reference" "C14"
+			(at 215.9 124.4535 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 215.9 126.9935 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 213.36 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 213.36 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 213.36 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
+			(at 213.36 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "12abe823-65ba-4e55-905e-3d052bdd0995")
+		)
+		(pin "2"
+			(uuid "fa1dd3a6-f83c-49a9-a587-a0b1d24f89e4")
+		)
+		(instances
+			(project "phonkyo"
+				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -10736,7 +10736,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C107671"
+		(property "Description" "2.1 VRMS, 112dB Audio Stereo DAC with PLL and 32-bit, 384kHz PCM Interface, TSSOP-20"
 			(at 215.9 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -10747,7 +10747,7 @@
 				)
 			)
 		)
-		(property "Description" "2.1 VRMS, 112dB Audio Stereo DAC with PLL and 32-bit, 384kHz PCM Interface, TSSOP-20"
+		(property "LCSC" "C107671"
 			(at 215.9 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -10910,4 +10910,5 @@
 			(page "1")
 		)
 	)
+	(embedded_fonts no)
 )
