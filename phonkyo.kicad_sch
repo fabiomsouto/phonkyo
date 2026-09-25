@@ -6303,6 +6303,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C5124634"
+			(at -57.15 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" ""
 			(at 66.04 50.8 0)
 			(hide yes)
@@ -6499,6 +6510,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1525"
+			(at 177.8 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 177.8 43.18 0)
 			(hide yes)
@@ -6569,6 +6591,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 236.22 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25117"
 			(at 236.22 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -6660,6 +6693,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1525"
+			(at 67.31 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" ""
 			(at 67.31 177.8 0)
 			(hide yes)
@@ -6730,6 +6774,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 198.12 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25092"
 			(at 198.12 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -6886,6 +6941,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 255.27 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C385029"
 			(at 255.27 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -7053,6 +7119,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C131467"
+			(at 93.98 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" ""
 			(at 93.98 170.18 0)
 			(hide yes)
@@ -7203,6 +7280,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 265.43 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C95562"
 			(at 265.43 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -7378,6 +7466,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C107369"
+			(at 223.52 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 223.52 95.25 0)
 			(hide yes)
@@ -7536,6 +7635,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C107369"
+			(at 231.14 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 231.14 67.31 0)
 			(hide yes)
@@ -7682,6 +7792,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 198.12 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25092"
 			(at 198.12 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -7930,6 +8051,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C25744"
+			(at 165.1 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Resistor"
 			(at 165.1 69.85 0)
 			(hide yes)
@@ -8012,6 +8144,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C385029"
+			(at 157.48 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 157.48 77.47 0)
 			(hide yes)
@@ -8083,6 +8226,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 101.6 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C131467"
 			(at 101.6 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -8252,6 +8406,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C25765"
+			(at 165.1 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Resistor"
 			(at 165.1 77.47 0)
 			(hide yes)
@@ -8334,6 +8499,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 195.58 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 195.58 125.73 0)
 			(hide yes)
@@ -8406,6 +8582,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 128.27 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C95562"
 			(at 128.27 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -8577,6 +8764,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C146734"
+			(at 81.28 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" ""
 			(at 81.28 177.8 0)
 			(hide yes)
@@ -8676,6 +8874,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C5446"
+			(at 186.69 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Positive 60-250mA Low Dropout Regulator, Fixed Output, SOT-23"
 			(at 186.69 120.65 0)
 			(hide yes)
@@ -8749,6 +8958,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 198.12 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25092"
 			(at 198.12 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -8841,6 +9061,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C15849"
+			(at 175.26 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 175.26 125.73 0)
 			(hide yes)
@@ -8923,6 +9154,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C19702"
+			(at 204.47 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 204.47 125.73 0)
 			(hide yes)
@@ -8995,6 +9237,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 213.36 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1525"
 			(at 213.36 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -9151,6 +9404,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 236.22 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25117"
 			(at 236.22 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -9474,6 +9738,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C19702"
+			(at 240.03 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 240.03 78.74 0)
 			(hide yes)
@@ -9544,6 +9819,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 227.33 121.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C17168"
 			(at 227.33 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -9700,6 +9986,17 @@
 			)
 		)
 		(property "Datasheet" ""
+			(at 255.27 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C385029"
 			(at 255.27 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -9945,6 +10242,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C19702"
+			(at 189.23 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 189.23 43.18 0)
 			(hide yes)
@@ -10106,6 +10414,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C1525"
+			(at 231.14 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 231.14 78.74 0)
 			(hide yes)
@@ -10256,6 +10575,17 @@
 			)
 		)
 		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/pcm5102a.pdf"
+			(at 215.9 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C107671"
 			(at 215.9 66.04 0)
 			(hide yes)
 			(show_name no)
