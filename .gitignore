@@ -1,4 +1,5 @@
 fp-info-cache
 *backups
 *.zip
-*.lck
+*.lck__pycache__/
+*.pyc

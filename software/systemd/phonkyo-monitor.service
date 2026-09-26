@@ -1,0 +1,33 @@
+[Unit]
+Description=phonkyo - follow DAC playback and drive the Onkyo amp over RI
+After=sound.target
+Wants=sound.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -m phonkyo.monitor
+# lgpio creates its .lgd-nfy* notification FIFOs in the CWD, so the working
+# directory must be writable -- /opt/phonkyo is read-only under ProtectSystem.
+RuntimeDirectory=phonkyo
+WorkingDirectory=/run/phonkyo
+Environment=PYTHONPATH=/opt/phonkyo
+Environment=HOME=/run/phonkyo
+Restart=on-failure
+RestartSec=10
+
+# RI timing needs SCHED_FIFO; without it CPU contention causes multi-ms
+# edge errors and every frame is corrupt. See install/MANIFEST.md.
+AmbientCapabilities=CAP_SYS_NICE
+CapabilityBoundingSet=CAP_SYS_NICE
+DeviceAllow=/dev/gpiochip0 rw
+SupplementaryGroups=gpio audio
+User=phonkyo
+Group=phonkyo
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

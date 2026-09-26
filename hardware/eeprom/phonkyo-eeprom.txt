@@ -1,0 +1,55 @@
+########################################################################
+# phonkyo HAT ID EEPROM settings
+#
+# Built with:  eepmake phonkyo-eeprom.txt phonkyo.eep phonkyo-hat.dtbo
+# Flashed with: eepflash.sh -w -f=phonkyo.eep -t=24c256
+#
+# Once present, the Pi firmware reads this at boot and:
+#   - applies the embedded device tree overlay (the PCM5102A sound card),
+#     so config.txt needs no dtoverlay= line
+#   - applies the GPIO function/pull settings below
+#   - exposes identity under /proc/device-tree/hat/ so software can tell
+#     which board (and which revision) it is running on
+########################################################################
+
+# 128-bit UUID. Left as zeros so eepmake generates one per unit at
+# programming time -- each board gets a genuinely unique id.
+product_uuid 00000000-0000-0000-0000-000000000000
+
+# 16-bit product id / version. Bump product_ver per board revision so
+# software can adapt to hardware differences.
+product_id 0x0001
+product_ver 0x0003
+
+vendor "obcecado.com"
+product "phonkyo DAC + Onkyo RI"
+
+########################################################################
+# GPIO bank settings -- 0 means leave at firmware default
+gpio_drive 0
+gpio_slew 0
+gpio_hysteresis 0
+
+# This board is powered from the Pi and never sources current back into
+# the 5V rail, so back-powering is declared as none.
+back_power 0
+
+########################################################################
+# Pins this HAT uses. Declaring them documents the board's claim on the
+# header and lets the firmware set them up before userspace starts.
+#
+# GPIO0/1 (ID_SD/ID_SC, header pins 27/28) carry this EEPROM. They are
+# reserved by the HAT spec and deliberately not listed: eepmake rejects
+# GPIOs below 2. Programming needs no entry here either -- eepflash.sh
+# brings up its own I2C bus on GPIO0/1 (see the Makefile).
+#
+#         GPIO  FUNCTION  PULL
+#         ----  --------  ----
+setgpio   18    ALT0      DEFAULT    # PCM_CLK  -> U2 BCK  (via R9 22R)
+setgpio   19    ALT0      DEFAULT    # PCM_FS   -> U2 LRCK (via R7 22R)
+setgpio   21    ALT0      DEFAULT    # PCM_DOUT -> U2 DIN  (via R8 22R)
+
+# Onkyo RI line on J4 tip. Declared as an input with a pull-down so the
+# board is passive at boot: the bus idles low, and phonkyo only drives it
+# while transmitting a frame.
+setgpio   25    INPUT     DOWN
