@@ -1,7 +1,7 @@
 SHELL := bash
 .ONESHELL: 
 
-RELEASE ?= v0.1
+RELEASE ?= v0.3
 
 .PHONY: bundle
 bundle:

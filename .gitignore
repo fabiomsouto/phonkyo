@@ -1,5 +1,26 @@
+# KiCad
 fp-info-cache
 *backups
+*-bak
+*.lck
+~*.lck
+_autosave-*
+#auto_saved_files#
+*.kicad_prl
+
+# Build outputs
 *.zip
-*.lck__pycache__/
+hardware/eeprom/phonkyo.eep
+hardware/eeprom/phonkyo-hat.dtbo
+hardware/eeprom/phonkyo-dump.txt
+hardware/eeprom/readback.eep
+
+# Python
+__pycache__/
 *.pyc
+
+# Editors and OS
+.history/
+.vscode/
+*:Zone.Identifier
+.DS_Store
