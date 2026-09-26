@@ -26,7 +26,9 @@ verify: phonkyo.eep
 	@grep -vE '^\s*#|^\s*$$' phonkyo-dump.txt | head -20
 
 # Writes the EEPROM on a fitted HAT. JP1 (write protect) must be OPEN.
-# eepflash.sh bit-bangs i2c-0 on the ID pins, so nothing else may hold them.
+# eepflash.sh uses /dev/i2c-0 or i2c-9 if present; otherwise it loads the
+# i2c-gpio overlay on GPIO0/1 (the ID pins) as bus 9 by itself, so no
+# config.txt change is needed. Nothing else may hold those pins.
 flash: phonkyo.eep
 	sudo eepflash.sh -w -f=phonkyo.eep -t=$(EEPROM)
 

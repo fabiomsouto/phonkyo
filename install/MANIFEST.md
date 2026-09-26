@@ -111,7 +111,7 @@ name = "phonkyo";
 output_device = "hw:CARD=sndrpihifiberry";
 ```
 
-Address the DAC by card **name**, never `hw:0` -- see section 11. raspotify and
+Address the DAC by card **name**, never `hw:0` -- see section 10. raspotify and
 Plexamp use the ALSA default and need no change while the DAC is the only card.
 
 ## 6. Plexamp headless
@@ -222,34 +222,7 @@ Installer implication: the RI service needs `CAP_SYS_NICE` (or root), e.g.
   sources describe) that is out of spec for a 3.3 V pin and v0.3 needs
   protection there. Measure tip-to-sleeve before connecting.
 
-## 10. Infrared -- the route RI cannot provide
-
-Not currently used (no IR hardware on v0.2/v0.3) but documented because it is
-the only way to reach TV input, volume and mute on a TX-8020.
-
-`software/phonkyo/ir.py` holds the RC-875S codes and emits raw pulse/space
-sequences for `ir-ctl`, built from the remote's own measured timings rather
-than relying on a NEC-variant decoder:
-
-| Button | Code |
-|---|---|
-| `input_tv` | `0x4B403BC4` |
-| `volume_up` / `volume_down` | `0x4BB640BF` / `0x4BB6C03F` |
-| `mute` | `0x4BB6A05F` |
-| `power` | `0x4B36D32C` |
-
-Everything needed is already on the Trixie image: `gpio-ir-tx.dtbo`,
-`pwm-ir-tx.dtbo` and `ir-ctl` (in `v4l-utils`). Only an IR LED is missing.
-
-If a future board revision adds one: use `pwm-ir-tx` on **GPIO12 or GPIO13**
-for a hardware-generated 38 kHz carrier. Do *not* use the overlay's default
-`gpio_pin=18` -- that is the I2S bit clock for the DAC.
-
-Adding an IR *receiver* as well (e.g. TSOP38238) would let users learn codes
-from their own remote, making the feature model-agnostic rather than tied to
-the RC-875S.
-
-## 11. HAT ID EEPROM -- automating setup for buyers
+## 10. HAT ID EEPROM -- automating setup for buyers
 
 Source in `hardware/eeprom/`. Fitted from v0.3 (U1, R1, R2, C1, JP1); v0.2
 has none. It is what turns "edit config.txt by hand" into "flash the image,
@@ -281,7 +254,7 @@ not what Zero 2 W firmware expects. Without it the build dies with
 Tooling is already present on the Trixie image via `rpi-eeprom`: `eepmake`,
 `eepflash.sh`, `eepdump`, plus `dtc` from `device-tree-compiler`.
 
-Verified: builds to a 901-byte image with the 778-byte overlay embedded, and
+Verified: builds to a 906-byte image with the 778-byte overlay embedded, and
 every field round-trips through `eepdump`.
 
 `product_uuid` is left as zeros in the settings file so `eepmake` generates a
@@ -302,7 +275,7 @@ television. `hat.alsa_card()` resolves the card by *name*
 (`hw:CARD=sndrpihifiberry`), which removes that whole class of support
 ticket.
 
-## 12. Playback-follow service (phonkyo-monitor)
+## 11. Playback-follow service (phonkyo-monitor)
 
 Watches the DAC and drives the amp over RI: power on + select DOCK when audio
 starts, power off after an idle timeout.

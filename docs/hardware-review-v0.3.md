@@ -206,7 +206,7 @@ board is not HAT-spec compliant. The Pi cannot identify it or apply its overlay
 automatically, so every user has to edit `config.txt` by hand.
 
 The EEPROM image is already built and validated in `hardware/eeprom/`: a
-901-byte HAT v1 image that embeds the sound-card overlay and the GPIO settings.
+906-byte HAT v1 image that embeds the sound-card overlay and the GPIO settings.
 Once U1 is fitted, the board configures itself at boot.
 
 **Recommendation:** Assign footprints and place U1, R1, R2, JP1 and C1 on ID_SD
