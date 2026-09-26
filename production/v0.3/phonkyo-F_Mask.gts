@@ -1,12 +1,12 @@
 G04 #@! TF.GenerationSoftware,KiCad,Pcbnew,10.0.6*
-G04 #@! TF.CreationDate,2026-09-26T13:13:05+01:00*
+G04 #@! TF.CreationDate,2026-09-26T13:18:33+01:00*
 G04 #@! TF.ProjectId,phonkyo,70686f6e-6b79-46f2-9e6b-696361645f70,rev?*
 G04 #@! TF.SameCoordinates,Original*
 G04 #@! TF.FileFunction,Soldermask,Top*
 G04 #@! TF.FilePolarity,Negative*
 %FSLAX46Y46*%
 G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
-G04 Created by KiCad (PCBNEW 10.0.6) date 2026-09-26 13:13:05*
+G04 Created by KiCad (PCBNEW 10.0.6) date 2026-09-26 13:18:33*
 %MOMM*%
 %LPD*%
 G01*
@@ -129,8 +129,8 @@ D19*
 X145480000Y-89500000D03*
 X146500000Y-89500000D03*
 D21*
-X128800000Y-78000000D03*
-X127400000Y-78000000D03*
+X128500000Y-78000000D03*
+X127100000Y-78000000D03*
 D22*
 X148275000Y-85450000D03*
 X148275000Y-86100000D03*
