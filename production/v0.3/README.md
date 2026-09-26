@@ -20,7 +20,7 @@ cd production/v0.3 && zip phonkyo-v0.3-gerbers.zip *.g* *.drl
   TSSOPs; lead-free HASL also works.
 - PCB Assembly on the **top side** for every SMD part.
 - **J1 (40-pin female header) is not in the JLC BOM or CPL on purpose.**
-  Boards ship without it and the customer solders it on the bottom side.
+  It is hand-soldered on the bottom side before each board is programmed.
   JLC does not ship loose parts with an assembly order, so buy the headers
   separately (see below).
 - JP1 is a solder jumper, not a part. It ships **open**.
@@ -41,31 +41,14 @@ each carry a one-off fee:
 | 3.9 k 0402 1%, Yageo | C131467 | HAT spec pull-up value, no basic part exists |
 | ESD5Z5.0T1G, onsemi, SOD-523 | C82044 | D1, ESD clamp on the RI jack; 5 V standoff so a 5 V receiver is not clipped. No basic ESD diode exists |
 
-## Buy separately (shipped loose to customers)
+## Buy separately
 
 | Part | LCSC | Notes |
 |---|---|---|
-| J1: 2x20 female header, 2.54 mm, 8.5 mm high, through-hole | C5124634 | one per board; the usual pHAT height, so check it matches the v0.2 stack height |
+| J1: 2x20 female header, 2.54 mm, 8.5 mm high, through-hole | C5124634 | one per board, hand-soldered; the usual pHAT height, so check it matches the v0.2 stack height |
 
 The J1 reference stays in the schematic's `LCSC` field. If a JLC BOM is
 regenerated from the schematic, delete the J1 line again.
-
-## Programming the EEPROM before shipping
-
-The EEPROM is written over header pins 27/28, so a board without J1 needs a
-temporary connection to a Pi. Either of these works:
-
-- **Pimoroni Pogo-a-go-go** (solderless GPIO pogo pins): a 2x20 spring-pin
-  header that makes contact with an unsoldered HAT's plated holes. Seat it
-  on the Pi, press the board on, and run `make flash`.
-  https://shop.pimoroni.com/products/pogo-a-go-go-solderless-gpio-pogo-pins
-- **DIY:** a long-tail 2x20 stacking female header (LCSC C35165, 12.3 mm
-  tails) on the Pi, with the board dropped onto the tails and held with
-  light sideways pressure while flashing. It costs almost nothing but is
-  less repeatable than spring pins.
-
-Both are untested with this board: flash one unit and confirm it with
-`make verify` before doing a batch.
 
 ## Before paying
 
@@ -75,6 +58,11 @@ footprints. Rotate them in their tool if needed.
 
 ## After the boards arrive
 
-Program the ID EEPROM with JP1 open (`cd hardware/eeprom && make flash` on
-the Pi, through the jig above). Then either bridge JP1 to write-protect it,
-or leave it open so a customer can re-flash it later.
+For each board:
+
+1. Solder J1 on the bottom side.
+2. Seat the board on a Pi with JP1 open.
+3. Run `cd hardware/eeprom && make flash` on the Pi. It builds the image with a
+   fresh UUID, writes it, reads it back and compares. The steps are in
+   `install/MANIFEST.md`, section 10, on the software branch.
+4. Bridge JP1 with solder to write-protect the EEPROM.
