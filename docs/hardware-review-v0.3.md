@@ -45,6 +45,7 @@ readiness rather than circuit design:
 | 7 | No ESD protection on the RI jack | **Fixed** |
 | 8 | 470 R output resistors are poor for headphones | Closed: J2 is a line output for an amplifier |
 | 9 | Logo silkscreen printed over the RI jack pads | **Fixed** |
+| 10 | Pours touching NPTH holes and nearly reaching the board edge | **Fixed** |
 
 ## What is done well
 
@@ -306,6 +307,23 @@ put its cathode bar on the ring of the adjacent via. D1 was moved 0.3 mm so
 the bar sits in clear board. KiCad's 3D viewer still draws the overlap unless its own "clip
 silkscreen at solder mask edges" option is turned on; the Gerbers are what
 count.
+
+### 10. Copper pours touched the NPTH holes and nearly reached the board edge
+
+Found in a pre-order check. A DRC with the project's ignored checks switched on
+and JLC-style limits showed the GND and GNDA pours touching all 10 NPTH holes:
+the 4 mounting holes and the jacks' locating pegs, at 0.0005 mm. They also
+came within 0.05 mm of the board edge. The project allowed 0 mm hole clearance
+and 0.05 mm edge clearance. Copper at an NPTH hole is drilled through, which
+risks burrs, and at the mounting holes the metal standoffs sit on it. Copper
+at the edge can be exposed when the outline is routed.
+
+**Status: Fixed.** The project now requires 0.25 mm from holes and 0.3 mm from
+the edge, and the pours were refilled. No tracks moved. The B.Cu GND pour is
+still one piece, at 1673 mm2 (down from 1734). The strict DRC now reports only
+artwork items that v0.2 was built with: the logos have no courtyard, the logo
+overlaps J4's outline, the TrueType labels are thinner than the check likes,
+and silkscreen crosses pads (clipped at plot time, see finding 9).
 
 ## Remaining for v0.4
 
