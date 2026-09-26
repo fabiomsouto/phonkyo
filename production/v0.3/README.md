@@ -66,3 +66,21 @@ For each board:
    fresh UUID, writes it, reads it back and compares. The steps are in
    `install/MANIFEST.md`, section 10, on the software branch.
 4. Bridge JP1 with solder to write-protect the EEPROM.
+
+## Bring-up checklist for the first boards
+
+1. **Visual:** D1's cathode faces R12. Pin 1 of U1, U2 and U3 is correct. No
+   solder bridges on the two TSSOPs.
+2. **Before fitting to a Pi,** with a multimeter: +5V, +3V3 and +3.3VA are not
+   shorted to ground. GND to GNDA reads about 0 R (the NT1 net tie).
+3. **Power:** on a Pi, U3's output (+3.3VA) is about 3.3 V.
+4. **EEPROM:** solder J1, JP1 open, `make flash`, then reboot.
+   `/proc/device-tree/hat/vendor` reads `obcecado.com`. To prove the overlay
+   comes from the EEPROM, remove `dtoverlay=hifiberry-dac` from config.txt:
+   the sound card should still appear in `aplay -l`. Then bridge JP1.
+5. **Audio:** play through the amplifier and compare noise against v0.2.
+6. **RI:** power-on and DOCK from the Pi (transmit through R12), and the sniffer
+   (receive). If transmit fails, fit 0 R in place of R12.
+7. **Optional:** measure the RI line's high level while the receiver sends, and
+   the receiver's pull-down. With a pull-down of 10 k or more, R12 can go up to
+   470 R to 1 k for more margin.
