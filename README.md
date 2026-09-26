@@ -4,11 +4,13 @@ A PiHat for Onkyo RI-enabled devices, hence the name (PiHat Onkyo).
 
 ![Phonkyo v0.3](art/renders/phonkyo-v0.3-angle.png)
 
-Phonkyo allows you to control your Onkyo home theater system using a Raspberry Pi. It's a great way to automate your home
-entertainment experience, particularly if you use tools such as Home Assistant in your setup.
+Phonkyo makes a Raspberry Pi behave like one of Onkyo's own docks. Onkyo receivers have a small RI (Remote
+Interactive) jack on the back, which docks use to switch the receiver on and change it to the dock input. Phonkyo speaks
+the same protocol, so when you start playing music the receiver comes on and selects DOCK by itself, and after a few
+minutes of silence it switches off again.
 
-It also turns the Raspberry Pi into a network audio player: a PCM5102A DAC on the hat lets it act as an AirPlay 2 receiver,
-a Spotify Connect device and a headless Plexamp player, feeding your amplifier through a line-level output.
+The music comes from the Pi itself: a PCM5102A DAC on the hat turns it into an AirPlay 2 receiver, a Spotify Connect
+device and a headless Plexamp player, feeding the receiver's dock input through a line-level output.
 
 I believe this device could also be used for other RI-enabled devices, such as Marantz, but I have no way to test it
 (and therefore implement support)!
