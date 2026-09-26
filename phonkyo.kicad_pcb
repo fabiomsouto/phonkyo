@@ -51,7 +51,7 @@
 			)
 			(layer "F.Mask"
 				(type "Top Solder Mask")
-				(color "Green")
+				(color "Black")
 				(thickness 0.01)
 			)
 			(layer "F.Cu"
@@ -71,7 +71,7 @@
 			)
 			(layer "B.Mask"
 				(type "Bottom Solder Mask")
-				(color "Green")
+				(color "Black")
 				(thickness 0.01)
 			)
 			(layer "B.Paste"
@@ -2969,15 +2969,15 @@
 			(uuid "f8d2a421-21b8-4b27-81c0-fff6a96f4ef0")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Connector_Audio.3dshapes/Jack_3.5mm_KoreanHropartsElec_PJ-320D-4A_Horizontal.wrl"
+		(model "${KIPRJMOD}/3dmodels/Jack_3.5mm_PJ-320D-4A.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz -3.15 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 270)
 			)
 		)
 	)
@@ -15324,15 +15324,15 @@
 			(uuid "1e6672bb-f8bb-4eb7-b53f-0ed37c686b07")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Connector_Audio.3dshapes/Jack_3.5mm_KoreanHropartsElec_PJ-320D-4A_Horizontal.wrl"
+		(model "${KIPRJMOD}/3dmodels/Jack_3.5mm_PJ-320D-4A.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz -3.15 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 270)
 			)
 		)
 	)
