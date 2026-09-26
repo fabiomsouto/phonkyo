@@ -249,8 +249,9 @@ apply its overlay automatically, so every user has to edit `config.txt` by hand.
   `obcecado.com`, `product_id` 0x0001 and `product_ver` 0x0003. It embeds the
   sound-card overlay and the GPIO settings. GPIO0/1 are deliberately absent from
   its GPIO map, because the spec reserves them.
-- Program it with `make flash` on a Pi. `eepflash.sh` brings up the I2C bus on
-  GPIO0/1 itself.
+- Program it with `make flash` on a Pi, with JP1 open. It rebuilds the image
+  so each board gets its own UUID, writes it, and reads it back to compare.
+  `eepflash.sh` brings up the I2C bus on GPIO0/1 itself.
 
 ### 7. No ESD or series protection on the RI jack
 
@@ -300,7 +301,9 @@ risking poor solder joints on the RI jack. The project's DRC has
 
 **Status: Fixed.** The plot settings now subtract the mask from the silkscreen,
 so the silkscreen is clipped at every pad opening. The logo is unchanged
-elsewhere. KiCad's 3D viewer still draws the overlap unless its own "clip
+elsewhere. A related case came up with the new ESD diode: D1's SOD-523 outline
+put its cathode bar on the ring of the adjacent via. D1 was moved 0.3 mm so
+the bar sits in clear board. KiCad's 3D viewer still draws the overlap unless its own "clip
 silkscreen at solder mask edges" option is turned on; the Gerbers are what
 count.
 
