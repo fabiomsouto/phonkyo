@@ -44,10 +44,32 @@ possible over RI on the TX-8020; `install/MANIFEST.md` records the full code sea
 The design is in KiCad 10: `phonkyo.kicad_sch` and `phonkyo.kicad_pcb`. **v0.2 is the latest revision that has been built
 and tested; v0.3 is designed but not yet built.**
 
+## Buying one
+
+Phonkyo is sold in small, hand-built batches through [obcecado.com/phonkyo](https://obcecado.com/phonkyo/).
+
+- **Basic kit:** an assembled Phonkyo board with the 40-pin header already soldered. €30 plus shipping at the time
+  of writing; the product page has the current price.
+- **Complete kit:** also includes an audio cable, an RI cable and a 3D-printed case. Not available yet.
+- **Shipping** is to European Union countries only.
+
+To order, email [phonkyo@obcecado.com](mailto:phonkyo@obcecado.com?subject=Phonkyo%20order) with:
+
+- the kit you want and how many
+- the country it ships to
+- your receiver model
+
+I'll reply with the total including shipping and how to pay. There's no online checkout.
+
+RI support varies from receiver to receiver, so check the
+[compatibility table](https://obcecado.com/phonkyo/#receiver-compatibility) before ordering. Only the Onkyo TX-8020 has
+been tested so far. If yours isn't listed, mention it in your email and I'll tell you what I know.
+
 ## Getting started
 
 The software runs on Raspberry Pi OS Lite 64-bit (Trixie) on a Raspberry Pi Zero 2 W. There is no one-step installer
-yet. `install/MANIFEST.md` lists everything to install and configure, step by step:
+yet. The [setup guide](https://obcecado.com/phonkyo/setup/) walks through it from a blank microSD card, and
+`install/MANIFEST.md` has the full technical record of everything to install and configure:
 
 - the DAC and the ALSA setup
 - AirPlay 2 (shairport-sync), Spotify Connect (raspotify) and Plexamp
