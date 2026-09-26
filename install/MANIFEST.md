@@ -217,10 +217,11 @@ Installer implication: the RI service needs `CAP_SYS_NICE` (or root), e.g.
 - Protocol constants (3000/1000/1000/2000 us, 12 bits) are from community
   reverse-engineering, not confirmed against hardware.
 - Command codes are unknown; `ri.sniff()` exists to learn them from a real unit.
-- **Line polarity is unconfirmed.** GPIO25 connects to the J4 tip with no series
-  resistor, clamp or level shifter. If the RI bus idles high at 5 V (as some
-  sources describe) that is out of spec for a 3.3 V pin and v0.3 needs
-  protection there. Measure tip-to-sleeve before connecting.
+- **RI electrical levels.** On a TX-8020 the line idles low. The level the
+  receiver drives when it sends has not been measured; some sources describe
+  5 V. On v0.2, GPIO25 connects to the J4 tip directly. From v0.3 it goes
+  through R12 (100 R), with D1 (5 V ESD clamp) on the jack side, which limits
+  the current into the GPIO if a receiver does drive 5 V.
 
 ## 10. HAT ID EEPROM -- automating setup for buyers
 

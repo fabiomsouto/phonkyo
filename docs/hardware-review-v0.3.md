@@ -18,9 +18,9 @@ branch.
 
 On that branch, KiCad 10 DRC with schematic parity reports **0 unconnected
 items, 0 parity errors and no DRC errors**. The only warnings are
-library-mismatch warnings on older footprints. ERC still reports 4 missing
-`PWR_FLAG`s, on +5V, +3V3, GND and GNDA. These are bookkeeping rather than real
-faults.
+library-mismatch warnings on older footprints. ERC reports no errors: the 4
+missing `PWR_FLAG`s on +5V, +3V3, GND and GNDA have been added. Only label and
+library-version warnings remain.
 
 Only **v0.2** has been built. A v0.2 board was exercised end to end on a Pi Zero
 2 W with an Onkyo TX-8020 receiver: DAC output on both channels, RI transmit, and
@@ -37,13 +37,13 @@ readiness rather than circuit design:
 | # | Finding | Status |
 |---|---|---|
 | 1 | Plot settings wrote to `production/v0.2` | **Fixed** |
-| 2 | The I2S bit clock has the longest route and no reference plane | Open |
+| 2 | The I2S bit clock has the longest route and no reference plane | **Fixed**: B.Cu run cut from 54.8 to 15.1 mm |
 | 3 | Decoupling capacitors far from their pins; none at AVDD | **Fixed** |
 | 4 | XSMT | Withdrawn: leave as designed |
 | 5 | Ground topology mixes split and unified approaches | **Decided**: keep the split; the single tie is now a net tie |
 | 6 | ID EEPROM drawn but not fitted | **Fixed** |
-| 7 | No ESD protection on the RI jack | Open |
-| 8 | 470 R output resistors are poor for headphones | Open |
+| 7 | No ESD protection on the RI jack | **Fixed** |
+| 8 | 470 R output resistors are poor for headphones | Closed: J2 is a line output for an amplifier |
 | 9 | Logo silkscreen printed over the RI jack pads | **Fixed** |
 
 ## What is done well
@@ -61,10 +61,11 @@ readiness rather than circuit design:
   capacitors here is a common mistake.
 - **22 R series damping** on all three I2S lines (R7, R8, R9).
 - **BCK avoids the analog region.** None of its route passes over the GNDA pour.
-- **Ground stitching around the DAC.** 7 of the board's 12 GND vias sit around
+- **Ground stitching around the DAC.** 7 of the board's 13 GND vias sit around
   U2's digital side (x 149 to 156.5 mm), including one under the body for DGND
   pin 19. Of the rest, one is at the GND/GNDA tie point, two serve the ID
-  EEPROM, and two are in the J4 area, one of them on the jack's sleeve.
+  EEPROM, one serves the RI ESD diode, and two are in the J4 area, one of them
+  on the jack's sleeve.
 - **XSMT power sensing.** R5/R6 divide +5V onto XSMT. This is TI's documented
   "External Power Sense Undervoltage Protection Mode" (datasheet §11.3,
   Fig. 39): the DAC mutes as the upstream rail falls, before the regulated
@@ -125,8 +126,21 @@ negligible at these rates.
 acts as its reference, and the slot goes away. If the route has to stay on B.Cu,
 add a ground pour on F.Cu along its path.
 
-**Status: Open.** The route is unchanged in v0.3. The v0.2 prototype has no
-audible problem, so this is an EMC concern to weigh for v0.4.
+**Status: Fixed.** The top-edge run is now on F.Cu, above the header at
+y = 70.55, over an unbroken B.Cu ground. BCK drops through the header gap at
+x = 155.3 to one via and takes the existing short B.Cu path to R9. Moving it
+the rest of the way is not practical: the LRCK/DIN fan-out and the DVDD/LDOO
+capacitors box it in near the DAC.
+
+| | Before | Now |
+|---|---|---|
+| BCK on B.Cu | 54.8 mm | 15.1 mm |
+| BCK on F.Cu | 3.5 mm | 45.2 mm |
+| All B.Cu track | 102.5 mm | 64.1 mm |
+| B.Cu GND pour | 1715 mm2 | 1734 mm2, still one piece |
+
+To make room, ID_SCL now drops through the header gap east of pin 12, and the
+EEPROM's +3V3 hop comes from a rail via at x = 123.6.
 
 ### 3. Decoupling capacitors were too far from the pins
 
@@ -253,7 +267,15 @@ unknown impedance, and a series resistor forms a divider with it. Measure the
 receiver-side pull-down before choosing a value, so that a logic high still
 reaches the receiver at a valid level.
 
-**Status: Open.**
+**Status: Fixed.** J4's tip now reaches GPIO25 through R12 (100 R), and D1
+(onsemi ESD5Z5.0T1G, SOD-523) clamps the jack side to GND. The 5 V standoff
+means a receiver that drives 5 V is not clipped. 100 R was chosen because the
+receiver's pull-down is still unmeasured: it keeps the transmit level safe
+while limiting current into the GPIO, compared with the direct connection on
+v0.2. If the pull-down is later measured at 10 k or more, raising R12 to
+470 R to 1 k would add margin. The parts sit on F.Cu between the +3V3 and +5V
+rails, where GPIO25 crosses on B.Cu. The skull logo and the jack body leave no
+room next to J4 itself.
 
 ### 8. Output impedance
 
@@ -265,7 +287,8 @@ headphones into a 3.5 mm jack.
 currently reads `Audio`. If driving headphones matters, reduce the series
 resistance and rescale the filter capacitor to keep the corner frequency.
 
-**Status: Open.**
+**Status: Closed.** phonkyo is meant to feed an amplifier's line input, not
+headphones. Into 10 k or more, 470 R costs about 0.4 dB.
 
 ### 9. Logo silkscreen was printed over the RI jack pads
 
@@ -281,16 +304,13 @@ elsewhere. KiCad's 3D viewer still draws the overlap unless its own "clip
 silkscreen at solder mask edges" option is turned on; the Gerbers are what
 count.
 
-## Remaining changes for v0.4, in order
+## Remaining for v0.4
 
-1. Route BCK on F.Cu (finding 2).
-2. Add an ESD diode and a series resistor on J4, after measuring the
-   receiver-side pull-down (finding 7).
-3. Decide whether J2 should drive headphones; at least label it as a line
-   output (finding 8).
-4. Add the 4 missing `PWR_FLAG`s so ERC is clean.
-5. Revisit the ground topology only if v0.3 shows noise or fails EMC
+1. Measure the receiver's RI pull-down, and raise R12 if it allows
+   (finding 7).
+2. Revisit the ground topology only if v0.3 shows noise or fails EMC
    (finding 5).
+3. Optionally relabel J2 `Line Out` (finding 8).
 
 ## Related
 
