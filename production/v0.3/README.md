@@ -39,6 +39,7 @@ each carry a one-off fee:
 | 2.2 nF 0402 C0G, Murata GRM1555C1H222JA01D | C385029 | C0G for the audio output filter; the basic 2.2 nF is X7R |
 | 2.2 uF 0402 X5R 10 V, Samsung CL05A225KP5NSNC | C107369 | the basic 2.2 uF is only 6.3 V |
 | 3.9 k 0402 1%, Yageo | C131467 | HAT spec pull-up value, no basic part exists |
+| ESD5Z5.0T1G, onsemi, SOD-523 | C82044 | D1, ESD clamp on the RI jack; 5 V standoff so a 5 V receiver is not clipped. No basic ESD diode exists |
 
 ## Buy separately (shipped loose to customers)
 
@@ -68,8 +69,8 @@ Both are untested with this board: flash one unit and confirm it with
 
 ## Before paying
 
-In JLC's placement preview, check pin 1 of U1, U2 and U3 and the orientation of
-J2/J4. KiCad and JLC often disagree on rotation for SOT-23 and TSSOP
+In JLC's placement preview, check pin 1 of U1, U2 and U3, the cathode of D1
+(it faces R12 and the via between them), and the orientation of J2/J4. KiCad and JLC often disagree on rotation for SOT-23 and TSSOP
 footprints. Rotate them in their tool if needed.
 
 ## After the boards arrive
