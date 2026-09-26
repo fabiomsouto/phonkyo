@@ -20,7 +20,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 HAT_DIR = Path("/proc/device-tree/hat")
-VENDOR = "phonkyo"
+VENDOR = "obcecado.com"
+PRODUCT_ID = 0x0001  # phonkyo; other Obcecado boards use other ids
 
 
 @dataclass(frozen=True)
@@ -33,7 +34,7 @@ class HatInfo:
 
     @property
     def is_phonkyo(self) -> bool:
-        return self.vendor.lower() == VENDOR
+        return self.vendor.lower() == VENDOR and self.product_id == PRODUCT_ID
 
     @property
     def revision(self) -> str:

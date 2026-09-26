@@ -21,7 +21,7 @@ product_uuid 00000000-0000-0000-0000-000000000000
 product_id 0x0001
 product_ver 0x0003
 
-vendor "phonkyo"
+vendor "obcecado.com"
 product "phonkyo DAC + Onkyo RI"
 
 ########################################################################
@@ -37,6 +37,11 @@ back_power 0
 ########################################################################
 # Pins this HAT uses. Declaring them documents the board's claim on the
 # header and lets the firmware set them up before userspace starts.
+#
+# GPIO0/1 (ID_SD/ID_SC, header pins 27/28) carry this EEPROM. They are
+# reserved by the HAT spec and deliberately not listed: eepmake rejects
+# GPIOs below 2. Programming needs no entry here either -- eepflash.sh
+# brings up its own I2C bus on GPIO0/1 (see the Makefile).
 #
 #         GPIO  FUNCTION  PULL
 #         ----  --------  ----
