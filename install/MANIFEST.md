@@ -8,7 +8,7 @@ Intended as the source of truth for `phonkyo-setup.sh`.
 | | |
 |---|---|
 | Board | Raspberry Pi Zero 2 W (BCM2710A1, ARMv8) |
-| HAT | phonkyo v0.2 (PCM5102A DAC + RI jack) |
+| HAT | phonkyo v0.2 (PCM5102A DAC + RI jack), the hardware everything here was verified on. v0.3 adds the ID EEPROM and RI protection and has not been built yet |
 | OS | Raspberry Pi OS **Lite 64-bit**, Trixie (Debian 13) |
 | Verified image | `2026-09-15-raspios-trixie-arm64-lite.img.xz` |
 | Kernel at time of writing | `6.18.50+rpt-rpi-v8` |
@@ -247,6 +247,21 @@ make verify                          # dump it back and eyeball the fields
 make flash                           # on the Pi, HAT fitted, JP1 open
 ```
 
+The image identifies the board as vendor `obcecado.com`, product
+`phonkyo DAC + Onkyo RI`, `product_id` 0x0001, `product_ver` 0x0003.
+
+### Programming a board
+
+1. Solder J1 (boards ship without it) and seat the board on a Pi.
+2. Leave JP1 open, so WP floats low and the EEPROM is writable.
+3. `make flash`. It rebuilds the image (so the board gets its own UUID),
+   writes it, reads the chip back, compares the bytes, and prints the UUID.
+   `eepflash.sh` brings up an I2C bus on GPIO0/1 by itself; nothing needs
+   adding to config.txt.
+4. Bridge JP1 with solder to write-protect the EEPROM.
+5. Reboot. `/proc/device-tree/hat/` should now exist, and
+   `python3 -m phonkyo.hat` should report the board.
+
 **`eepmake` must be run with `-v1`.** It now defaults to the HAT+ format
 (Pi 5 era), which dropped `gpio_drive`/`gpio_slew`/`gpio_hysteresis` and is
 not what Zero 2 W firmware expects. Without it the build dies with
@@ -258,9 +273,11 @@ Tooling is already present on the Trixie image via `rpi-eeprom`: `eepmake`,
 Verified: builds to a 906-byte image with the 778-byte overlay embedded, and
 every field round-trips through `eepdump`.
 
-`product_uuid` is left as zeros in the settings file so `eepmake` generates a
-fresh UUID per unit at programming time -- each board gets a unique identity.
-Bump `product_ver` per board revision so software can adapt.
+`product_uuid` is left as zeros in the settings file, so `eepmake` generates a
+new UUID every time it builds the image. `make flash` therefore rebuilds before
+every write. Do not program a batch from one prebuilt `phonkyo.eep` with
+`eepflash.sh` directly, or every board will share one UUID. Bump `product_ver`
+per board revision so software can adapt.
 
 ### What software does with it
 
