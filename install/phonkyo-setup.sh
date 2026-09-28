@@ -113,7 +113,9 @@ OS_CODENAME=$(. /etc/os-release && echo "${VERSION_CODENAME:-}")
 # shellcheck disable=SC1091
 OS_PRETTY=$(. /etc/os-release && echo "${PRETTY_NAME:-unknown}")
 [ "$OS_CODENAME" = trixie ] || say "  Warning: tested on Raspberry Pi OS Trixie; this is $OS_PRETTY."
-sudo -v || die "sudo needs your password to continue."
+# Pi OS gives the first user passwordless sudo, but "sudo -v" still asks for a
+# password when another rule (the sudo group's) needs one, so try without first.
+sudo -n true 2>/dev/null || sudo -v || die "sudo needs your password to continue."
 # Keep sudo's cached password alive: the AirPlay build outlasts its 15 minutes.
 ( while kill -0 "$$" 2>/dev/null; do sudo -n true 2>/dev/null; sleep 60; done ) &
 curl -fsSI -m 15 https://github.com >/dev/null || die "no internet connection (can't reach github.com)."
