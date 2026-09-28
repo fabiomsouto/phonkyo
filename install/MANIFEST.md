@@ -196,11 +196,12 @@ Install it before debugging any mDNS/AirPlay discovery problem.
 - [x] python3-lgpio
 - [x] raspotify
 - [x] nqptp
-- [x] nqptp + shairport-sync with AirPlay 2 — `01078ad-AirPlay2-smi10-OpenSSL-Avahi-ALSA-soxr`
+- [x] nqptp + shairport-sync with AirPlay 2 — `01078ad-AirPlay2-smi10-OpenSSL-Avahi-ALSA-soxr-metadata-dbus-mpris`
 - [x] Plexamp 4.13.2 claimed as `phonkyo`, systemd unit rewritten
 - [x] avahi-utils
 - [x] **RI control on GPIO25 via lgpio** — verified end to end on a real receiver
 - [x] `phonkyo-monitor` playback-follow service
+- [x] Receiver remote controls Plexamp (play/pause, skip, seek, repeat) — verified with a TX-8020 remote
 - [ ] `phonkyo-setup.sh` installer
 - [ ] log2ram
 
@@ -235,12 +236,15 @@ Measured end-to-end: 3.43 us worst-case edge error over 270 edges.
 Installer implication: the RI service needs `CAP_SYS_NICE` (or root), e.g.
 `AmbientCapabilities=CAP_SYS_NICE` in its unit.
 
-### Unverified
+### Verified and open
 
-- Protocol constants (3000/1000/1000/2000 us, 12 bits) are from community
-  reverse-engineering, not confirmed against hardware.
-- Command codes are unknown; `ri.sniff()` exists to learn them from a real unit.
-- **RI electrical levels.** On a TX-8020 the line idles low. The level the
+- **Protocol constants** (3000/1000/1000/2000 us, 12 bits) came from community
+  reverse-engineering and are now confirmed on a TX-8020 in both directions:
+  the receiver acts on frames sent with them, and frames it sends decode with
+  them, with captured pulses within about 25 us of nominal.
+- **Command codes** are mapped in both directions; see "Verified RI command
+  codes" and "Codes the receiver sends *to* the dock" below.
+- **RI electrical levels (open).** On a TX-8020 the line idles low. The level the
   receiver drives when it sends has not been measured; some sources describe
   5 V. On v0.2, GPIO25 connects to the J4 tip directly. From v0.3 it goes
   through R12 (100 R), with D1 (5 V ESD clamp) on the jack side, which limits

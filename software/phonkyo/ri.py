@@ -1,8 +1,9 @@
 """Onkyo RI (Remote Interactive) transmitter for the phonkyo HAT.
 
 The RI jack (J4) carries a single-wire baseband signal on GPIO25; tip is
-signal, ring/sleeve are ground. There is no level shifting or protection on
-the v0.2 board -- GPIO25 goes straight to the tip.
+signal, ring/sleeve are ground. On the v0.2 board GPIO25 goes straight to the
+tip. From v0.3 it goes through a 100 R series resistor (R12), with a 5 V ESD
+clamp (D1) on the jack side.
 
 Timing is generated in software via lgpio on /dev/gpiochip0. This deliberately
 avoids pigpio, whose DMA timebase defaults to the PCM peripheral -- the same
@@ -28,9 +29,9 @@ GPIO_CHIP = 0
 class RITiming:
     """Pulse-distance encoding. Line idles low; the transmitter drives it high.
 
-    NOTE: these values come from community reverse-engineering of the RI bus
-    and have not yet been confirmed against a real Onkyo unit. Verify with
-    `sniff()` against a known-good RI device before trusting them.
+    These values come from community reverse-engineering of the RI bus and are
+    confirmed on an Onkyo TX-8020 in both directions: the receiver acts on
+    frames sent with them, and frames it sends decode with them.
     """
 
     header_high: int = 3000
