@@ -185,10 +185,16 @@ Install it before debugging any mDNS/AirPlay discovery problem.
 
 ## 8. Nice to have
 
-- `log2ram` — was on the original install; reduces SD card writes noticeably
-  on an appliance that logs continuously.
-- journald is **volatile** by default on this image. Persistent logs need
-  `/etc/systemd/journald.conf.d/` with `Storage=persistent`; weigh against flash wear.
+- `log2ram` (**optional**) — was on the original install, to cut SD card writes.
+  It adds little on this image. Raspberry Pi OS already keeps the journal in
+  RAM: `/usr/lib/systemd/journald.conf.d/40-rpi-volatile-storage.conf` sets
+  `Storage=volatile`, `/var/log/journal` stays empty, and there is no rsyslog.
+  Measured on 2026-09-28 after about two days of uptime: `/var/log` held
+  892 KB, and the only writes were apt/dpkg logs from package installs.
+  Worth adding only if something starts logging to files under `/var/log`.
+- Persistent logs would need `Storage=persistent` in
+  `/etc/systemd/journald.conf.d/`; weigh that against flash wear. The installer
+  should leave the journal volatile.
 
 ## Status
 
@@ -203,7 +209,7 @@ Install it before debugging any mDNS/AirPlay discovery problem.
 - [x] `phonkyo-monitor` playback-follow service
 - [x] Receiver remote controls Plexamp (play/pause, skip, seek, repeat) — verified with a TX-8020 remote
 - [ ] `phonkyo-setup.sh` installer
-- [ ] log2ram
+- [ ] log2ram (optional; see section 8)
 
 ## 9. RI control timing (measured, Pi Zero 2 W)
 
