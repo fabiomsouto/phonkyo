@@ -74,9 +74,14 @@ COMMANDS = {
 # the dock device class, so further transport codes very likely live in the
 # same family.
 DOCK_RX_COMMANDS = {
+    0x5C0: "fast_forward",
+    0x5C1: "rewind",
     0x5C8: "track_forward",
     0x5C9: "track_back",
     0x5CB: "play_pause",
+    0x5D2: "shuffle",
+    0x5D3: "repeat",
+    0x5D6: "menu",
 }
 
 

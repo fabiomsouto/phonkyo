@@ -319,7 +319,10 @@ ticket.
 ## 11. Playback-follow service (phonkyo-monitor)
 
 Watches the DAC and drives the amp over RI: power on + select DOCK when audio
-starts, power off after an idle timeout.
+starts, power off after an idle timeout. It also listens for the receiver's
+transport buttons and passes them to Plexamp (see "The receiver's remote"
+below). `--remote control|log|off` sets whether it acts on them, only logs
+them, or ignores them; the default is `control`.
 
 ### Detecting playback
 
@@ -349,6 +352,41 @@ for vinyl or TV gets it silently killed after the idle timeout.
 - Service user needs supplementary groups `gpio` (for `/dev/gpiochip0`) and
   `audio`.
 
+### The receiver's remote
+
+With DOCK selected, the receiver forwards its remote's transport buttons to the
+dock over RI. `phonkyo/remote.py` listens for them inside `phonkyo-monitor`.
+The listener lives in the monitor because RI is one wire used in both
+directions: one object (`RILine`) owns the GPIO, listens by default, and pauses
+listening while it transmits. A separate listener process would hold the GPIO
+and make every `power_on_dock` fail with the line busy.
+
+Each press arrives as 3 frames about 50 ms apart and is folded into one press.
+Fast-forward and rewind keep firing every 0.4 s while held.
+
+| Button | Code | Action (Plexamp) |
+|---|---|---|
+| Play/pause | `0x5CB` | `playPause` |
+| Next track | `0x5C8` | `skipNext` |
+| Previous track | `0x5C9` | `skipPrevious` |
+| Fast-forward | `0x5C0` | `seekTo` current + 10 s |
+| Rewind | `0x5C1` | `seekTo` current - 10 s |
+| Repeat | `0x5D3` | `setParameters repeat`, cycling off -> all -> one -> off |
+| Shuffle | `0x5D2` | none: `setParameters shuffle` is accepted but ignored |
+| Menu | `0x5D6` | none: deliberately unassigned |
+
+Verified on 2026-09-28 with a TX-8020 remote and Plexamp 4.13.2. Plexamp's
+local API is on `127.0.0.1:32500`. It lists `stepForward`/`stepBack` as
+controllable but answers 404, hence `seekTo`.
+
+Presses only reach Plexamp when Plexamp is the player: the listener reads which
+process owns the DAC (`owner_pid` in the PCM status, resolved to its process
+through `Tgid`, since ALSA records the opening thread, e.g. Plexamp's
+`libuv-worker`), and ignores presses while shairport-sync or librespot is
+playing. AirPlay 2 senders offer no remote-control channel (section 5), and
+librespot has no local control interface; the Spotify Web API would be the way
+in, and is not set up.
+
 ### Verified RI command codes
 
 Recovered from the previous working install and confirmed against hardware:
@@ -366,14 +404,19 @@ RI is bidirectional. With DOCK selected, the receiver forwards its transport
 buttons to the attached dock. Captured from a real receiver, three isolated
 frames each:
 
-| Code | low 3 bits | Action |
-|---|---|---|
-| `0x5C8` | `000` | track forward |
-| `0x5C9` | `001` | track back |
-| `0x5CB` | `011` | play/pause |
+| Code | Action |
+|---|---|
+| `0x5C0` | fast-forward |
+| `0x5C1` | rewind |
+| `0x5C8` | track forward |
+| `0x5C9` | track back |
+| `0x5CB` | play/pause |
+| `0x5D2` | shuffle |
+| `0x5D3` | repeat |
+| `0x5D6` | menu |
 
-The upper 9 bits (`0b010111001`) are the dock device class; only the low 3
-bits vary, so other transport commands likely live in the same family.
+All are in the `0x5C_`/`0x5D_` family. See "The receiver's remote" (section
+11) for how phonkyo acts on them.
 
 This is the more interesting half: it means the receiver's own remote can
 drive playback on the Pi, if phonkyo listens for these and maps them onto

@@ -2,6 +2,8 @@
 
 Turns the receiver on (and selects DOCK) when audio starts, and off again
 after a quiet period, so the amp follows AirPlay/Spotify/Plexamp automatically.
+It also listens for the receiver's transport buttons, which the receiver
+forwards to the dock over RI, and passes them to Plexamp (see remote.py).
 
 Detecting playback is subtler than it looks. The previous phonkyo build keyed
 on `subdevices_avail` in /proc/asound -- i.e. "is the PCM device claimed". That
@@ -21,6 +23,7 @@ import sys
 import time
 from dataclasses import dataclass
 
+from .remote import RILine, RemoteListener, RemoteRouter
 from .ri import COMMANDS, RITransmitter, RealTimeUnavailable
 
 LOG = logging.getLogger("phonkyo.monitor")
@@ -75,10 +78,14 @@ class PlaybackDetector:
 
 
 class AmpController:
-    def __init__(self, gpio: int = 25, repeat: int = 3, dry_run: bool = False):
+    def __init__(self, gpio: int = 25, repeat: int = 3, dry_run: bool = False,
+                 line: RILine | None = None):
         self.gpio = gpio
         self.repeat = repeat
         self.dry_run = dry_run
+        # When the remote listener owns the RI line, transmit through it so the
+        # GPIO is never claimed twice.
+        self.line = line
         # Starts False deliberately: phonkyo only ever switches off an amp it
         # switched on. Otherwise turning the receiver on yourself for vinyl or
         # TV would have phonkyo silently kill it after the idle timeout.
@@ -90,8 +97,11 @@ class AmpController:
             LOG.info("dry-run: would send %s (%#05x)", name, code)
             return
         try:
-            with RITransmitter(gpio=self.gpio) as tx:
-                errors = tx.send(code, repeat=self.repeat, verify=True)
+            if self.line is not None:
+                errors = self.line.send(code, repeat=self.repeat)
+            else:
+                with RITransmitter(gpio=self.gpio) as tx:
+                    errors = tx.send(code, repeat=self.repeat, verify=True)
             worst = max(abs(e) for e in errors)
             LOG.info("sent %s (%#05x) x%d, worst edge error %.1f us",
                      name, code, self.repeat, worst)
@@ -114,9 +124,16 @@ class AmpController:
         self.powered = False
 
 
-def run(poll_interval: float, idle_timeout: float, gpio: int, dry_run: bool) -> int:
+def run(poll_interval: float, idle_timeout: float, gpio: int, dry_run: bool,
+        remote: str = "control") -> int:
     detector = PlaybackDetector()
-    amp = AmpController(gpio=gpio, dry_run=dry_run)
+    line = None
+    if remote != "off":
+        listener = RemoteListener(RemoteRouter(control=(remote == "control" and not dry_run)))
+        line = RILine(listener.on_frame, gpio=gpio)
+        LOG.info("listening for the receiver's transport buttons (%s mode)",
+                 "log" if remote == "log" or dry_run else "control")
+    amp = AmpController(gpio=gpio, dry_run=dry_run, line=line)
 
     stopping = False
 
@@ -148,6 +165,8 @@ def run(poll_interval: float, idle_timeout: float, gpio: int, dry_run: bool) -> 
 
         time.sleep(poll_interval)
 
+    if line is not None:
+        line.close()
     LOG.info("stopped")
     return 0
 
@@ -160,6 +179,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--gpio", type=int, default=25)
     ap.add_argument("--dry-run", action="store_true",
                     help="log what would be sent without driving the line")
+    ap.add_argument("--remote", choices=("control", "log", "off"), default="control",
+                    help="act on the receiver's transport buttons, only log them, or ignore them")
     ap.add_argument("-v", "--verbose", action="store_true")
     args = ap.parse_args(argv)
 
@@ -168,7 +189,7 @@ def main(argv: list[str] | None = None) -> int:
         format="%(levelname)s %(message)s",
         stream=sys.stdout,
     )
-    return run(args.poll, args.idle_timeout, args.gpio, args.dry_run)
+    return run(args.poll, args.idle_timeout, args.gpio, args.dry_run, args.remote)
 
 
 if __name__ == "__main__":

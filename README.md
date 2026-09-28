@@ -23,6 +23,9 @@ I believe this device could also be used for other RI-enabled devices, such as M
   line input.
 - **Onkyo RI control.** A second 3.5 mm jack connects to the receiver's RI port. It sends commands and listens to the
   codes the receiver sends back.
+- **The receiver's remote controls Plexamp.** Play/pause, next, previous, fast-forward, rewind and repeat on the
+  receiver's own remote work on Plexamp, just as they would on an Onkyo dock. AirPlay and Spotify can't be controlled
+  this way; see `install/MANIFEST.md`.
 - **Plug-and-play (v0.3).** A HAT ID EEPROM lets the Raspberry Pi recognise the board and load the sound card by itself,
   so there is nothing to add to `config.txt`.
 
