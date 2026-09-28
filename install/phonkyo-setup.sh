@@ -185,12 +185,14 @@ if has airplay; then
     run "Installing build dependencies" sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y \
         build-essential git autoconf automake libtool libpopt-dev libconfig-dev libasound2-dev \
         libavahi-client-dev libssl-dev libsoxr-dev libplist-dev libplist-utils libsodium-dev \
-        libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd libglib2.0-dev
+        libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev xxd libglib2.0-dev \
+        systemd-dev
     mkdir -p "$BUILD_DIR"
     fetch_commit() {  # fetch_commit URL COMMIT DIR
         rm -rf "$3" && git init -q "$3" && git -C "$3" fetch -q --depth 1 "$1" "$2" && git -C "$3" checkout -q FETCH_HEAD
     }
-    if [ "$(nqptp -V 2>/dev/null | head -1)" != "Version: 1.2.8. Shared Memory Interface Version: smi10." ]; then
+    # nqptp prints its version on stderr.
+    if [ "$(nqptp -V 2>&1 | head -1)" != "Version: 1.2.8. Shared Memory Interface Version: smi10." ]; then
         run "Downloading nqptp" fetch_commit https://github.com/mikebrady/nqptp.git "$NQPTP_COMMIT" "$BUILD_DIR/nqptp"
         run "Building nqptp" bash -c "cd '$BUILD_DIR/nqptp' && autoreconf -fi && ./configure --with-systemd-startup && make -j2"
         run "Installing nqptp" bash -c "cd '$BUILD_DIR/nqptp' && sudo make install"
