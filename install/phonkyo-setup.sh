@@ -191,13 +191,13 @@ if has airplay; then
     fetch_commit() {  # fetch_commit URL COMMIT DIR
         rm -rf "$3" && git init -q "$3" && git -C "$3" fetch -q --depth 1 "$1" "$2" && git -C "$3" checkout -q FETCH_HEAD
     }
-    # nqptp prints its version on stderr.
-    if [ "$(nqptp -V 2>&1 | head -1)" != "Version: 1.2.8. Shared Memory Interface Version: smi10." ]; then
+    # A build from git reports its commit, e.g. "Version: c925f27. Shared Memory ...".
+    if ! nqptp -V 2>/dev/null | grep -q "^Version: ${NQPTP_COMMIT:0:7}\."; then
         run "Downloading nqptp" fetch_commit https://github.com/mikebrady/nqptp.git "$NQPTP_COMMIT" "$BUILD_DIR/nqptp"
         run "Building nqptp" bash -c "cd '$BUILD_DIR/nqptp' && autoreconf -fi && ./configure --with-systemd-startup && make -j2"
         run "Installing nqptp" bash -c "cd '$BUILD_DIR/nqptp' && sudo make install"
     else
-        say "  nqptp 1.2.8 already installed"
+        say "  nqptp ${NQPTP_COMMIT:0:7} already installed"
     fi
     run "Starting nqptp" sudo systemctl enable --now nqptp
     # Rebuild if the binary isn't the pinned commit, or an earlier run left no service unit.
