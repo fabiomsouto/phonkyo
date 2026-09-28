@@ -96,8 +96,8 @@ cat <<EOF
 
 phonkyo setup
 This installs the players you choose and phonkyo-monitor on this Pi.
-It takes 5 minutes without AirPlay, or 30-40 minutes with it, since AirPlay 2
-is compiled here. The log is in $LOG.
+It takes about 10-15 minutes; AirPlay 2 is compiled here, which adds a few.
+The log is in $LOG.
 EOF
 
 # ---------------------------------------------------------------- preflight
@@ -122,7 +122,7 @@ say "  $({ tr -d '\0' </proc/device-tree/model; } 2>/dev/null || echo 'Raspberry
 if [ -z "$PLAYER_LIST" ]; then
     PLAYER_LIST=""
     yes_no "Install Spotify Connect (raspotify)?" Y && PLAYER_LIST+="spotify,"
-    yes_no "Install AirPlay 2 (shairport-sync, compiled here, about 30 minutes)?" Y && PLAYER_LIST+="airplay,"
+    yes_no "Install AirPlay 2 (shairport-sync, compiled here, a few minutes)?" Y && PLAYER_LIST+="airplay,"
     yes_no "Install Plexamp (needs a Plex account)?" Y && PLAYER_LIST+="plexamp,"
 fi
 has() { [[ ",$PLAYER_LIST," == *",$1,"* ]]; }
@@ -198,12 +198,14 @@ if has airplay; then
         say "  nqptp 1.2.8 already installed"
     fi
     run "Starting nqptp" sudo systemctl enable --now nqptp
-    if ! /usr/local/bin/shairport-sync -V 2>/dev/null | grep -q "^${SHAIRPORT_COMMIT:0:7}-AirPlay2"; then
+    # Rebuild if the binary isn't the pinned commit, or an earlier run left no service unit.
+    if ! /usr/local/bin/shairport-sync -V 2>/dev/null | grep -q "^${SHAIRPORT_COMMIT:0:7}-AirPlay2" ||
+       ! systemctl cat shairport-sync >/dev/null 2>&1; then
         run "Downloading shairport-sync" fetch_commit https://github.com/mikebrady/shairport-sync.git "$SHAIRPORT_COMMIT" "$BUILD_DIR/shairport-sync"
         run "Configuring shairport-sync" bash -c "cd '$BUILD_DIR/shairport-sync' && autoreconf -fi && ./configure \
             --sysconfdir=/etc --with-alsa --with-soxr --with-avahi --with-ssl=openssl --with-airplay-2 \
-            --with-dbus-interface --with-mpris-interface"
-        say "  Compiling shairport-sync. This is the slow part: 20-30 minutes on a Zero 2 W."
+            --with-dbus-interface --with-mpris-interface --with-systemd-startup"
+        say "  Compiling shairport-sync. This is the slow part: a few minutes on a Zero 2 W."
         run "Building shairport-sync" bash -c "cd '$BUILD_DIR/shairport-sync' && make -j2"
         run "Installing shairport-sync" bash -c "cd '$BUILD_DIR/shairport-sync' && sudo make install"
     else
