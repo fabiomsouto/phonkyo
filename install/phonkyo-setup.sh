@@ -73,14 +73,14 @@ ask() {  # ask VAR "question" default
 }
 yes_no() { local a; ask a "$1 [${2:-Y}/$( [ "${2:-Y}" = Y ] && echo n || echo N )]" "${2:-Y}"; [[ $a =~ ^[Yy] ]]; }
 
-hat_vendor() { tr -d '\0' </proc/device-tree/hat/vendor 2>/dev/null || true; }
+hat_vendor() { { tr -d '\0' </proc/device-tree/hat/vendor; } 2>/dev/null || true; }
 
 # ---------------------------------------------------------------- options
-PLAYERS="" NAME="" NO_REBOOT=0
+PLAYER_LIST="" PLAYER_NAME="" NO_REBOOT=0
 while [ $# -gt 0 ]; do
     case $1 in
-        --players) PLAYERS=${2:-}; shift ;;
-        --name) NAME=${2:-}; shift ;;
+        --players) PLAYER_LIST=${2:-}; shift ;;
+        --name) PLAYER_NAME=${2:-}; shift ;;
         --yes|-y) ASSUME_YES=1 ;;
         --no-reboot) NO_REBOOT=1 ;;
         -h|--help) sed -n '2,22p' "$0" 2>/dev/null || echo "See https://obcecado.com/phonkyo/setup/"; exit 0 ;;
@@ -105,27 +105,30 @@ step "Checking this Pi"
 [ "$(id -u)" -ne 0 ] || die "run this as your normal user, not root; it uses sudo where needed."
 command -v sudo >/dev/null || die "sudo is missing."
 [ "$(uname -m)" = aarch64 ] || die "this needs the 64-bit Raspberry Pi OS (found $(uname -m))."
+# /etc/os-release defines NAME and friends, so read it in a subshell.
 # shellcheck disable=SC1091
-. /etc/os-release
-[ "${VERSION_CODENAME:-}" = trixie ] || say "  Warning: tested on Raspberry Pi OS Trixie; this is ${PRETTY_NAME:-unknown}."
+OS_CODENAME=$(. /etc/os-release && echo "${VERSION_CODENAME:-}")
+# shellcheck disable=SC1091
+OS_PRETTY=$(. /etc/os-release && echo "${PRETTY_NAME:-unknown}")
+[ "$OS_CODENAME" = trixie ] || say "  Warning: tested on Raspberry Pi OS Trixie; this is $OS_PRETTY."
 sudo -v || die "sudo needs your password to continue."
 # Keep sudo's cached password alive: the AirPlay build outlasts its 15 minutes.
 ( while kill -0 "$$" 2>/dev/null; do sudo -n true 2>/dev/null; sleep 60; done ) &
 curl -fsSI -m 15 https://github.com >/dev/null || die "no internet connection (can't reach github.com)."
-say "  $(tr -d '\0' </proc/device-tree/model 2>/dev/null || echo 'Raspberry Pi'), ${PRETTY_NAME:-}"
+say "  $({ tr -d '\0' </proc/device-tree/model; } 2>/dev/null || echo 'Raspberry Pi'), $OS_PRETTY"
 [ "$(hat_vendor)" = obcecado.com ] && say "  phonkyo board with ID EEPROM detected"
 
 # ---------------------------------------------------------------- choices
-if [ -z "$PLAYERS" ]; then
-    PLAYERS=""
-    yes_no "Install Spotify Connect (raspotify)?" Y && PLAYERS+="spotify,"
-    yes_no "Install AirPlay 2 (shairport-sync, compiled here, about 30 minutes)?" Y && PLAYERS+="airplay,"
-    yes_no "Install Plexamp (needs a Plex account)?" Y && PLAYERS+="plexamp,"
+if [ -z "$PLAYER_LIST" ]; then
+    PLAYER_LIST=""
+    yes_no "Install Spotify Connect (raspotify)?" Y && PLAYER_LIST+="spotify,"
+    yes_no "Install AirPlay 2 (shairport-sync, compiled here, about 30 minutes)?" Y && PLAYER_LIST+="airplay,"
+    yes_no "Install Plexamp (needs a Plex account)?" Y && PLAYER_LIST+="plexamp,"
 fi
-has() { [[ ",$PLAYERS," == *",$1,"* ]]; }
-if [ -z "$NAME" ]; then ask NAME "Name shown on phones? [phonkyo]" phonkyo; fi
-[[ $NAME =~ ^[A-Za-z0-9][A-Za-z0-9\ ._-]{0,39}$ ]] || die "the name may only use letters, digits, spaces, dots, dashes and underscores."
-say "  Players: ${PLAYERS%,}   Name: $NAME"
+has() { [[ ",$PLAYER_LIST," == *",$1,"* ]]; }
+if [ -z "$PLAYER_NAME" ]; then ask PLAYER_NAME "Name shown on phones? [phonkyo]" phonkyo; fi
+[[ $PLAYER_NAME =~ ^[A-Za-z0-9][A-Za-z0-9\ ._-]{0,39}$ ]] || die "the name may only use letters, digits, spaces, dots, dashes and underscores."
+say "  Players: ${PLAYER_LIST%,}   Name: $PLAYER_NAME"
 
 # ---------------------------------------------------------------- boot config
 step "Boot configuration"
@@ -168,9 +171,9 @@ if has spotify; then
     run "Installing raspotify" sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y raspotify
     CONF=/etc/raspotify/conf
     if sudo grep -qE '^LIBRESPOT_NAME=' "$CONF"; then
-        run "Setting the Spotify name" sudo sed -i -E "s|^LIBRESPOT_NAME=.*|LIBRESPOT_NAME=\"$NAME\"|" "$CONF"
+        run "Setting the Spotify name" sudo sed -i -E "s|^LIBRESPOT_NAME=.*|LIBRESPOT_NAME=\"$PLAYER_NAME\"|" "$CONF"
     else
-        run "Setting the Spotify name" bash -c "echo 'LIBRESPOT_NAME=\"$NAME\"' | sudo tee -a $CONF >/dev/null"
+        run "Setting the Spotify name" bash -c "echo 'LIBRESPOT_NAME=\"$PLAYER_NAME\"' | sudo tee -a $CONF >/dev/null"
     fi
     run "Starting raspotify" sudo systemctl enable --now raspotify
     run "Applying the name" sudo systemctl restart raspotify
@@ -208,7 +211,7 @@ if has airplay; then
     fi
     SCONF=/etc/shairport-sync.conf
     [ -f "$SCONF" ] || run "Creating $SCONF" sudo cp /etc/shairport-sync.conf.sample "$SCONF"
-    run "Setting the AirPlay name" sudo sed -i -E "0,/^[[:space:]]*(\/\/)?[[:space:]]*name = \"[^\"]*\";/s//\tname = \"$NAME\";/" "$SCONF"
+    run "Setting the AirPlay name" sudo sed -i -E "0,/^[[:space:]]*(\/\/)?[[:space:]]*name = \"[^\"]*\";/s//\tname = \"$PLAYER_NAME\";/" "$SCONF"
     run "Pointing AirPlay at the DAC" sudo sed -i -E "0,/^[[:space:]]*(\/\/)?[[:space:]]*output_device = \"[^\"]*\";/s//\toutput_device = \"hw:CARD=$CARD\";/" "$SCONF"
     run "Reloading systemd" sudo systemctl daemon-reload
     run "Enabling shairport-sync" sudo systemctl enable shairport-sync
@@ -290,20 +293,20 @@ fi
 
 if [ "$REBOOT_NEEDED" = 1 ]; then
     if [ "$NO_REBOOT" = 0 ] && yes_no "A reboot is needed to switch on the DAC. Reboot now?" Y; then
-        say "Rebooting. When the Pi is back, play something to \"$NAME\"."
+        say "Rebooting. When the Pi is back, play something to \"$PLAYER_NAME\"."
         sudo systemctl reboot
     else
-        say "Reboot when you're ready (sudo reboot), then play something to \"$NAME\"."
+        say "Reboot when you're ready (sudo reboot), then play something to \"$PLAYER_NAME\"."
     fi
 else
-    say "All done. Play something to \"$NAME\"."
+    say "All done. Play something to \"$PLAYER_NAME\"."
 fi
 }
 
 # Plexamp's sign-in: a single-use claim token that expires after 4 minutes,
 # fed to two prompts in turn. See install/MANIFEST.md, section 6.
 claim_plexamp() {
-    local token="" name="$NAME" rc
+    local token="" name="$PLAYER_NAME" rc
     cat <<'EOF'
 
   Plexamp needs to be signed in to your Plex account, once.
