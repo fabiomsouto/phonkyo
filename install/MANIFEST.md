@@ -116,10 +116,10 @@ local user call them. They report whether a session is active, the player
 state, the sender's name and the current track's metadata.
 
 **Remote control does not work in AirPlay 2 mode.** Verified on 2026-09-28
-with an iPhone streaming from the Music app: `RemoteControl.Available` stays
-`false`, `Next`/`PlayPause` through either interface have no effect, and
-`RemoteCommand` returns status 490 (no remote-control channel from the
-sender). shairport-sync's remote control uses DACP, which senders only offer
+with an iPhone, from both the Spotify app and Apple's Podcasts app:
+`RemoteControl.Available` stays `false`, `Next`/`PlayPause` through either
+interface have no effect, and `RemoteCommand` returns status 490 (no
+remote-control channel from the sender). shairport-sync's remote control uses DACP, which senders only offer
 in classic AirPlay sessions; AirPlay 2 senders are controlled over a newer
 protocol that shairport-sync does not implement. So the receiver's transport
 buttons cannot drive AirPlay playback. The interfaces are still worth
