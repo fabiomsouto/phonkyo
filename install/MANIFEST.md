@@ -86,6 +86,7 @@ avahi-daemon libavahi-client-dev libssl-dev libsoxr-dev
 libplist-dev libplist-utils libsodium-dev
 libavutil-dev libavcodec-dev libavformat-dev
 uuid-dev libgcrypt-dev xxd
+libglib2.0-dev          # for the D-Bus/MPRIS interfaces
 ```
 
 > `plistutil` is in **`libplist-utils`**, not `libplist-dev`. Omitting it
@@ -98,9 +99,31 @@ cd nqptp && autoreconf -fi && ./configure --with-systemd-startup && make -j2 && 
 git clone --depth 1 https://github.com/mikebrady/shairport-sync.git
 cd shairport-sync && autoreconf -fi && ./configure \
     --sysconfdir=/etc --with-alsa --with-soxr --with-avahi \
-    --with-ssl=openssl --with-systemd --with-airplay-2 \
+    --with-ssl=openssl --with-airplay-2 \
+    --with-dbus-interface --with-mpris-interface \
   && make -j2 && sudo make install
 ```
+
+`make install` installs the systemd unit (in `/usr/local/lib/systemd/system/`)
+by itself when systemd is present. An earlier version of this manifest passed
+`--with-systemd`, which configure ignores as unrecognised; the real flag is
+`--with-systemd-startup`, and it isn't needed.
+
+The D-Bus and MPRIS interfaces register `org.gnome.ShairportSync` and
+`org.mpris.MediaPlayer2.ShairportSync` on the system bus. `make install` adds
+their policy files to `/etc/dbus-1/system.d/`; the default policy lets any
+local user call them. They report whether a session is active, the player
+state, the sender's name and the current track's metadata.
+
+**Remote control does not work in AirPlay 2 mode.** Verified on 2026-09-28
+with an iPhone streaming from the Music app: `RemoteControl.Available` stays
+`false`, `Next`/`PlayPause` through either interface have no effect, and
+`RemoteCommand` returns status 490 (no remote-control channel from the
+sender). shairport-sync's remote control uses DACP, which senders only offer
+in classic AirPlay sessions; AirPlay 2 senders are controlled over a newer
+protocol that shairport-sync does not implement. So the receiver's transport
+buttons cannot drive AirPlay playback. The interfaces are still worth
+building for the state and metadata.
 
 Zero 2 W has 512 MB RAM — use `-j2`, not `-j4`.
 
