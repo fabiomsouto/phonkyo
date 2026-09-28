@@ -60,8 +60,8 @@ TTY=""
 if [ -t 0 ]; then TTY=/dev/stdin; elif { : </dev/tty; } 2>/dev/null; then TTY=/dev/tty; fi
 ASSUME_YES=0
 
-ask() {  # ask VAR "question" default
-    local __var=$1 question=$2 default=${3-} answer=""
+ask() {  # ask VAR "question" default [secret]
+    local __var=$1 question=$2 default=${3-} secret=${4-} answer=""
     if [ "$ASSUME_YES" = 1 ] || [ -z "$TTY" ]; then
         answer=$default
     else
@@ -69,7 +69,8 @@ ask() {  # ask VAR "question" default
         answer=${answer:-$default}
     fi
     printf -v "$__var" '%s' "$answer"
-    printf '%s %s\n' "$question" "$answer" >>"$LOG"
+    # Buyers may be asked to send this log, so secrets never go in it.
+    printf '%s %s\n' "$question" "$([ -n "$secret" ] && [ -n "$answer" ] && echo "(hidden)" || echo "$answer")" >>"$LOG"
 }
 yes_no() { local a; ask a "$1 [${2:-Y}/$( [ "${2:-Y}" = Y ] && echo n || echo N )]" "${2:-Y}"; [[ $a =~ ^[Yy] ]]; }
 
@@ -90,6 +91,7 @@ while [ $# -gt 0 ]; do
 done
 
 : >>"$LOG"
+chmod 600 "$LOG"
 printf '\n######## phonkyo-setup %s, %s\n' "$PHONKYO_REF" "$(date -Is)" >>"$LOG"
 
 cat <<EOF
@@ -318,7 +320,7 @@ claim_plexamp() {
   2. Copy the code it shows (it starts with "claim-"). It expires after 4 minutes.
 EOF
     while :; do
-        ask token "  Paste the claim code (or press Enter to skip):" ""
+        ask token "  Paste the claim code (or press Enter to skip):" "" secret
         if [ -z "$token" ]; then
             say "  Skipped. Run this script again to sign Plexamp in later."
             return 0
