@@ -1,7 +1,18 @@
 # Phonkyo software manifest
 
-Everything the phonkyo software stack needs on top of a stock OS image.
-Intended as the source of truth for `phonkyo-setup.sh`.
+Everything the phonkyo software stack needs on top of a stock OS image, and
+why. `install/phonkyo-setup.sh` automates it:
+
+```sh
+curl -fsSL https://obcecado.com/phonkyo/install.sh | bash
+```
+
+The site serves a copy of `install/phonkyo-setup.sh`. The installer pins the
+phonkyo release it installs (`PHONKYO_REF`, a `sw-v*` tag), the nqptp and
+shairport-sync commits, and the Plexamp version. It was verified on
+2026-09-28 on a freshly flashed Raspberry Pi OS Lite 64-bit (Trixie) card on a
+Zero 2 W with a v0.2 board: all five services came up and the DAC became
+card 0 after its reboot. When a step here changes, change the installer too.
 
 ## Target platform
 
@@ -87,6 +98,7 @@ libplist-dev libplist-utils libsodium-dev
 libavutil-dev libavcodec-dev libavformat-dev
 uuid-dev libgcrypt-dev xxd
 libglib2.0-dev          # for the D-Bus/MPRIS interfaces
+systemd-dev             # for --with-systemd-startup
 ```
 
 > `plistutil` is in **`libplist-utils`**, not `libplist-dev`. Omitting it
@@ -100,14 +112,17 @@ git clone --depth 1 https://github.com/mikebrady/shairport-sync.git
 cd shairport-sync && autoreconf -fi && ./configure \
     --sysconfdir=/etc --with-alsa --with-soxr --with-avahi \
     --with-ssl=openssl --with-airplay-2 \
-    --with-dbus-interface --with-mpris-interface \
+    --with-dbus-interface --with-mpris-interface --with-systemd-startup \
   && make -j2 && sudo make install
 ```
 
-`make install` installs the systemd unit (in `/usr/local/lib/systemd/system/`)
-by itself when systemd is present. An earlier version of this manifest passed
-`--with-systemd`, which configure ignores as unrecognised; the real flag is
-`--with-systemd-startup`, and it isn't needed.
+**`--with-systemd-startup` is required.** Without it `make install` installs
+neither the service unit (`/usr/local/lib/systemd/system/`) nor the
+`shairport-sync` user, and `systemctl enable shairport-sync` fails. It needs
+`systemd-dev` for pkg-config's systemd data, which a fresh Lite image lacks.
+An earlier version of this manifest passed `--with-systemd`, which configure
+ignores as unrecognised; the first test of the installer on a fresh card
+exposed both. Compiling takes a few minutes on a Zero 2 W.
 
 The D-Bus and MPRIS interfaces register `org.gnome.ShairportSync` and
 `org.mpris.MediaPlayer2.ShairportSync` on the system bus. `make install` adds
@@ -208,7 +223,7 @@ Install it before debugging any mDNS/AirPlay discovery problem.
 - [x] **RI control on GPIO25 via lgpio** — verified end to end on a real receiver
 - [x] `phonkyo-monitor` playback-follow service
 - [x] Receiver remote controls Plexamp (play/pause, skip, seek, repeat) — verified with a TX-8020 remote
-- [ ] `phonkyo-setup.sh` installer
+- [x] `phonkyo-setup.sh` installer — verified on a freshly flashed card
 - [ ] log2ram (optional; see section 8)
 
 ## 9. RI control timing (measured, Pi Zero 2 W)

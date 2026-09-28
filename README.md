@@ -72,9 +72,19 @@ been tested so far. If yours isn't listed, mention it in your email and I'll tel
 
 ## Getting started
 
-The software runs on Raspberry Pi OS Lite 64-bit (Trixie) on a Raspberry Pi Zero 2 W. There is no one-step installer
-yet. The [setup guide](https://obcecado.com/phonkyo/setup/) walks through it from a blank microSD card, and
-`install/MANIFEST.md` has the full technical record of everything to install and configure:
+The software runs on Raspberry Pi OS Lite 64-bit (Trixie) on a Raspberry Pi Zero 2 W. On a fresh install, connect to
+the Pi over SSH and run:
+
+```sh
+curl -fsSL https://obcecado.com/phonkyo/install.sh | bash
+```
+
+It asks which players you want and what to call the device, installs everything, and reboots when it's done. It takes
+about 10-15 minutes. Plexamp needs a one-time sign-in code from [plex.tv/claim](https://plex.tv/claim), which it asks
+for at the right moment. Running it again is safe, and is how you update. The script is `install/phonkyo-setup.sh`.
+
+The [setup guide](https://obcecado.com/phonkyo/setup/) covers flashing the microSD card and the steps by hand, and
+`install/MANIFEST.md` is the full technical record of what gets installed and why:
 
 - the DAC and the ALSA setup
 - AirPlay 2 (shairport-sync), Spotify Connect (raspotify) and Plexamp
