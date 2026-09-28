@@ -327,6 +327,8 @@ EOF
         fi
         [[ $token =~ ^claim-[A-Za-z0-9_-]+$ ]] || { say "  That doesn't look like a claim code; it should start with \"claim-\"."; continue; }
         cat >"$BUILD_DIR/claim.exp" <<'EXP'
+# Don't echo the session: Plexamp's prompt would put the claim code in the log.
+log_user 0
 set timeout 180
 set token [lindex $argv 0]
 set name [lindex $argv 1]
